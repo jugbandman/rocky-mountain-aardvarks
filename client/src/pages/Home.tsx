@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle } from "lucide-react";
+import AngledDivider from "@/components/AngledDivider";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative bg-primary overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48 section-angle-bottom">
+        <section className="relative bg-primary overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
           {/* Abstract Background Elements */}
           <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
             <div className="absolute top-10 left-10 w-64 h-64 bg-secondary/10 rounded-full blur-3xl animate-pulse"></div>
@@ -65,6 +66,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <AngledDivider position="bottom" color="text-white" />
         </section>
 
         {/* Features Section */}
@@ -124,7 +126,7 @@ export default function Home() {
 
         {/* Classes Preview Section */}
         <section className="py-24 bg-brand-light relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-20 bg-white section-angle-bottom"></div>
+          <AngledDivider position="top" color="text-white" flip />
           
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
@@ -192,7 +194,8 @@ export default function Home() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-24 bg-primary text-white section-angle-top section-angle-bottom relative">
+        <section className="py-24 bg-primary text-white relative">
+          <AngledDivider position="top" color="text-brand-light" />
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-heading font-bold mb-16">Don't Take Our Word For It</h2>
             
@@ -228,6 +231,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <AngledDivider position="bottom" color="text-white" flip />
         </section>
 
         {/* CTA Section */}

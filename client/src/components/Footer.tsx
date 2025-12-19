@@ -1,9 +1,11 @@
 import { Link } from "wouter";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
+import AngledDivider from "@/components/AngledDivider";
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white pt-16 pb-8 section-angle-top mt-auto">
+    <footer className="bg-primary text-white pt-16 pb-8 mt-auto relative">
+      <AngledDivider position="top" color="text-white" />
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand Column */}
