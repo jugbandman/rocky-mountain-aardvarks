@@ -46,9 +46,9 @@ export default function Home() {
               <div className="flex-1 relative">
                 <div className="relative z-10 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
                   <img 
-                    src="https://images.unsplash.com/photo-1544642899-f0d6e5f6ed6f?q=80&w=1000&auto=format&fit=crop" 
+                    src="/photo-vertical.jpg" 
                     alt="Happy kids playing music" 
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                   <div className="absolute bottom-6 left-6 text-white">
@@ -75,6 +75,16 @@ export default function Home() {
               <p className="text-lg text-gray-600">
                 We don't just sing "The Wheels on the Bus." Our songs are original, intelligent, and irresistibly appealing to both kids and parents.
               </p>
+            </div>
+
+            {/* Photo Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+              <div className="rounded-3xl overflow-hidden shadow-lg h-64 md:h-80">
+                <img src="/photo-group-1.jpg" alt="Group music class fun" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div className="rounded-3xl overflow-hidden shadow-lg h-64 md:h-80">
+                <img src="/photo-close.jpg" alt="Guitar playing with kids" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
