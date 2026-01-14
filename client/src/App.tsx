@@ -5,12 +5,34 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Teachers from "./pages/Teachers";
+import Classes from "./pages/Classes";
+import Testimonials from "./pages/Testimonials";
+import Locations from "./pages/Locations";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminTeachers from "./pages/AdminTeachers";
+import AdminTestimonials from "./pages/AdminTestimonials";
+import AdminLocations from "./pages/AdminLocations";
+import AdminClasses from "./pages/AdminClasses";
+import AdminSessions from "./pages/AdminSessions";
+import AdminPages from "./pages/AdminPages";
 
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/teachers"} component={Teachers} />
+      <Route path={"/classes"} component={Classes} />
+      <Route path={"/testimonials"} component={Testimonials} />
+      <Route path={"/locations"} component={Locations} />
+      <Route path={"/admin"} component={AdminDashboard} />
+      <Route path={"/admin/teachers"} component={AdminTeachers} />
+      <Route path={"/admin/testimonials"} component={AdminTestimonials} />
+      <Route path={"/admin/locations"} component={AdminLocations} />
+      <Route path={"/admin/classes"} component={AdminClasses} />
+      <Route path={"/admin/sessions"} component={AdminSessions} />
+      <Route path={"/admin/pages"} component={AdminPages} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -28,7 +50,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
-        // switchable
+      // switchable
       >
         <TooltipProvider>
           <Toaster />

@@ -38,9 +38,10 @@ export default function Footer() {
             <ul className="space-y-3">
               <li><Link href="/"><a className="text-blue-100 hover:text-white transition-colors">Home</a></Link></li>
               <li><Link href="/classes"><a className="text-blue-100 hover:text-white transition-colors">Our Classes</a></Link></li>
-              <li><Link href="/about"><a className="text-blue-100 hover:text-white transition-colors">About Us</a></Link></li>
+              <li><Link href="/teachers"><a className="text-blue-100 hover:text-white transition-colors">Our Teachers</a></Link></li>
+              <li><Link href="/testimonials"><a className="text-blue-100 hover:text-white transition-colors">Testimonials</a></Link></li>
+              <li><Link href="/locations"><a className="text-blue-100 hover:text-white transition-colors">Locations</a></Link></li>
               <li><Link href="/parties"><a className="text-blue-100 hover:text-white transition-colors">Birthday Parties</a></Link></li>
-              <li><Link href="/contact"><a className="text-blue-100 hover:text-white transition-colors">Contact</a></Link></li>
             </ul>
           </div>
 
@@ -50,17 +51,17 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="text-blue-100 text-sm">
                 <strong className="block text-white mb-1">Washington Park</strong>
-                Epiphany Lutheran Church<br/>
+                Epiphany Lutheran Church<br />
                 790 S. Corona St. Denver, CO
               </li>
               <li className="text-blue-100 text-sm">
                 <strong className="block text-white mb-1">Cherry Creek Dance</strong>
-                2625 E. 3rd Ave.<br/>
+                2625 E. 3rd Ave.<br />
                 Denver, CO
               </li>
               <li className="text-blue-100 text-sm">
                 <strong className="block text-white mb-1">Cherry Hills/University</strong>
-                Family Care Collective<br/>
+                Family Care Collective<br />
                 3021 S University Blvd Denver, CO
               </li>
             </ul>

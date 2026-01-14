@@ -11,9 +11,10 @@ export default function Navbar() {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Classes", path: "/classes" },
-    { name: "About", path: "/about" },
+    { name: "Teachers", path: "/teachers" },
+    { name: "Testimonials", path: "/testimonials" },
+    { name: "Locations", path: "/locations" },
     { name: "Parties", path: "/parties" },
-    { name: "Contact", path: "/contact" },
   ];
 
   const isActive = (path: string) => location === path;
@@ -25,9 +26,9 @@ export default function Navbar() {
         <Link href="/">
           <a className="flex items-center gap-3 group">
             <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-primary group-hover:scale-105 transition-transform duration-300">
-              <img 
-                src="/logo.png" 
-                alt="Rocky Mountain Aardvarks Logo" 
+              <img
+                src="/logo.png"
+                alt="Rocky Mountain Aardvarks Logo"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -46,10 +47,9 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link key={item.path} href={item.path}>
-              <a 
-                className={`text-sm font-bold transition-colors hover:text-accent ${
-                  isActive(item.path) ? "text-primary" : "text-gray-600"
-                }`}
+              <a
+                className={`text-sm font-bold transition-colors hover:text-accent ${isActive(item.path) ? "text-primary" : "text-gray-600"
+                  }`}
               >
                 {item.name}
               </a>
@@ -76,14 +76,13 @@ export default function Navbar() {
                   </div>
                   <span className="font-heading font-bold text-lg text-primary">RM Aardvarks</span>
                 </div>
-                
+
                 <div className="flex flex-col gap-4">
                   {navItems.map((item) => (
                     <Link key={item.path} href={item.path}>
-                      <a 
-                        className={`text-lg font-bold py-2 border-b border-gray-100 transition-colors ${
-                          isActive(item.path) ? "text-accent" : "text-gray-600"
-                        }`}
+                      <a
+                        className={`text-lg font-bold py-2 border-b border-gray-100 transition-colors ${isActive(item.path) ? "text-accent" : "text-gray-600"
+                          }`}
                         onClick={() => setIsOpen(false)}
                       >
                         {item.name}

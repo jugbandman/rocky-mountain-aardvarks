@@ -1,14 +1,20 @@
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle } from "lucide-react";
+import { Link } from "wouter";
+import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle, Loader2 } from "lucide-react";
 import AngledDivider from "@/components/AngledDivider";
+import { useApi } from "@/hooks/useApi";
+import type { Session, Testimonial } from "@shared/schema";
 
 export default function Home() {
+  const { data: testimonials, loading: testimonialsLoading } = useApi<Testimonial[]>("/testimonials");
+  const { data: sessions, loading: sessionsLoading } = useApi<Session[]>("/sessions");
+
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans">
       <Navbar />
-      
+
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative bg-primary overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
@@ -34,21 +40,23 @@ export default function Home() {
                   Original, funky, and fun music classes for babies, toddlers, and preschoolers in Denver & Boulder. Join the band today!
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                  <Button className="bg-accent hover:bg-accent/90 text-white font-bold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
-                    Book a Free Trial
-                  </Button>
+                  <Link href="/classes">
+                    <Button className="bg-accent hover:bg-accent/90 text-white font-bold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
+                      Find a Class
+                    </Button>
+                  </Link>
                   <Button variant="outline" className="border-2 border-white/20 text-white hover:bg-white/10 font-bold text-lg px-8 py-6 rounded-full backdrop-blur-sm">
                     <PlayCircle className="mr-2 w-5 h-5" />
                     Watch Video
                   </Button>
                 </div>
               </div>
-              
+
               <div className="flex-1 relative">
                 <div className="relative z-10 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
-                  <img 
-                    src="/photo-vertical.jpg" 
-                    alt="Happy kids playing music" 
+                  <img
+                    src="/photo-group-1.jpg"
+                    alt="Rocky Mountain Aardvarks class fun"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
@@ -57,11 +65,20 @@ export default function Home() {
                     <p className="text-sm opacity-80">Director of Awesomeness</p>
                   </div>
                 </div>
-                
+
                 {/* Decorative Elements */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-secondary rounded-full flex items-center justify-center shadow-lg animate-bounce duration-[3000ms]">
-                  <Music className="w-10 h-10 text-primary" />
-                </div>
+                <a
+                  href="https://music.apple.com/us/artist/rocky-mountain-aardvarks/456184985"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute -top-6 -right-6 w-24 h-24 bg-secondary rounded-full flex items-center justify-center shadow-lg animate-bounce duration-[3000ms] hover:scale-110 transition-transform cursor-pointer group"
+                  title="Listen to our music!"
+                >
+                  <Music className="w-10 h-10 text-primary group-hover:rotate-12 transition-transform" />
+                  <div className="absolute -top-2 -right-2 bg-accent text-white text-[10px] font-bold px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Listen Now!
+                  </div>
+                </a>
                 <div className="absolute -bottom-8 -left-8 w-full h-full border-4 border-secondary/30 rounded-3xl -z-10 rotate-6"></div>
               </div>
             </div>
@@ -127,69 +144,59 @@ export default function Home() {
         {/* Classes Preview Section */}
         <section className="py-24 bg-brand-light relative overflow-hidden">
           <AngledDivider position="top" color="text-white" flip />
-          
+
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
               <div>
                 <h2 className="text-4xl font-heading font-bold text-primary mb-4">Upcoming Sessions</h2>
                 <p className="text-lg text-gray-600 max-w-xl">
-                  Join us for our next 7-week session of singing, dancing, and jamming!
+                  Join us for our next session of singing, dancing, and jamming!
                 </p>
               </div>
-              <Button variant="outline" className="border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-full px-6">
-                View Full Schedule <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
+              <Link href="/classes">
+                <Button variant="outline" className="border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-full px-6">
+                  View Full Schedule <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  location: "Washington Park",
-                  time: "Tuesdays 10:00 AM",
-                  status: "Open",
-                  instructor: "Hank Williams"
-                },
-                {
-                  location: "Cherry Creek Dance",
-                  time: "Mondays 10:00 AM",
-                  status: "Few Spots Left",
-                  instructor: "Hank Williams"
-                },
-                {
-                  location: "Cherry Hills",
-                  time: "Thursdays 10:00 AM",
-                  status: "Waitlist",
-                  instructor: "Brian Hartman"
-                }
-              ].map((cls, index) => (
-                <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
-                      Winter 2026
+            {sessionsLoading ? (
+              <div className="flex justify-center py-20">
+                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sessions?.slice(0, 3).map((cls, index) => (
+                  <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
+                        {cls.status}
+                      </div>
+                      <span className={`text-xs font-bold px-2 py-1 rounded ${cls.status === 'Open' ? 'bg-green-100 text-green-700' :
+                        cls.status === 'Waitlist' ? 'bg-red-100 text-red-700' :
+                          'bg-yellow-100 text-yellow-800'
+                        }`}>
+                        {cls.status}
+                      </span>
                     </div>
-                    <span className={`text-xs font-bold px-2 py-1 rounded ${
-                      cls.status === 'Open' ? 'bg-green-100 text-green-700' : 
-                      cls.status === 'Waitlist' ? 'bg-red-100 text-red-700' : 
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {cls.status}
-                    </span>
+                    <h3 className="text-xl font-bold text-primary mb-2">{(cls as any).location?.name || 'Varies'}</h3>
+                    <div className="flex items-center gap-2 text-gray-600 mb-2">
+                      <Calendar className="w-4 h-4" />
+                      <span>{cls.dayOfWeek} {cls.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600 mb-6">
+                      <Star className="w-4 h-4" />
+                      <span>with {cls.instructor}</span>
+                    </div>
+                    <Link href="/classes">
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-xl mt-4">
+                        Register
+                      </Button>
+                    </Link>
                   </div>
-                  <h3 className="text-xl font-bold text-primary mb-2">{cls.location}</h3>
-                  <div className="flex items-center gap-2 text-gray-600 mb-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>{cls.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-600 mb-6">
-                    <Star className="w-4 h-4" />
-                    <span>with {cls.instructor}</span>
-                  </div>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-xl">
-                    Register
-                  </Button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -198,37 +205,25 @@ export default function Home() {
           <AngledDivider position="top" color="text-brand-light" />
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-heading font-bold mb-16">Don't Take Our Word For It</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/10">
-                <div className="flex justify-center mb-6">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 text-secondary fill-secondary" />)}
-                </div>
-                <p className="text-lg italic mb-6 leading-relaxed">
-                  "You will listen to the music... even when your kids are not around. And unlike some other children's selections, it will not make you angry."
-                </p>
-                <p className="font-bold text-secondary">— Jon Stewart</p>
-              </div>
-              
-              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/10 transform md:-translate-y-4">
-                <div className="flex justify-center mb-6">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 text-secondary fill-secondary" />)}
-                </div>
-                <p className="text-lg italic mb-6 leading-relaxed">
-                  "It's no exaggeration to say that Weinstone has changed the musical geography of kids music... his music has gotten thousands of tiny toes tapping."
-                </p>
-                <p className="font-bold text-secondary">— Time Out NY Kids</p>
-              </div>
 
-              <div className="bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/10">
-                <div className="flex justify-center mb-6">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 text-secondary fill-secondary" />)}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonialsLoading ? (
+                <div className="col-span-3 flex justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-secondary" />
                 </div>
-                <p className="text-lg italic mb-6 leading-relaxed">
-                  "It's real music - the songs are so good! My daughter loves these songs..."
-                </p>
-                <p className="font-bold text-secondary">— Helen Hunt</p>
-              </div>
+              ) : (
+                testimonials?.slice(0, 3).map((t, i) => (
+                  <div key={i} className={`bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/10 ${i === 1 ? 'transform md:-translate-y-4' : ''}`}>
+                    <div className="flex justify-center mb-6">
+                      {[...Array(t.stars || 5)].map((_, i) => <Star key={i} className="w-5 h-5 text-secondary fill-secondary" />)}
+                    </div>
+                    <p className="text-lg italic mb-6 leading-relaxed">
+                      "{t.quote}"
+                    </p>
+                    <p className="font-bold text-secondary">— {t.author}</p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
           <AngledDivider position="bottom" color="text-white" flip />
