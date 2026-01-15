@@ -1,11 +1,23 @@
 # Ralph Activity Log
 
 ## Current Status
-- Last updated: 2026-01-14 19:55
-- Tasks completed: 3/14
-- Current task: 2.2 (Build login page UI)
+- Last updated: 2026-01-14 20:10
+- Tasks completed: 4/14
+- Current task: 3.1 (AdminTeachers CRUD)
 
 ## Session Log
+
+### 2026-01-14 20:10 - Task 2.2 Complete
+- Created AdminLogin page with password form
+- Added /admin/login route to App.tsx
+- Form uses react-hook-form + zod validation
+- Displays error messages for invalid password
+- Redirects to /admin on successful login
+- Added logout button to AdminDashboard header
+- Logout redirects to /admin/login
+- Fixed TypeScript types in useAuth.ts
+- TypeScript check passes
+- Next: Task 3.1 - AdminTeachers CRUD
 
 ### 2026-01-14 19:55 - Task 2.1 Complete
 - Added AUTH_PASSWORD to Bindings type

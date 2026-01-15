@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Star, MapPin, Calendar, FileText, Settings, BookOpen } from "lucide-react";
-import { Link } from "wouter";
+import { Users, Star, MapPin, Calendar, FileText, Settings, BookOpen, LogOut } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Spinner } from "@/components/ui/spinner";
 
 const adminLinks = [
     { href: "/admin/teachers", label: "Teachers", icon: Users, color: "text-blue-500" },
@@ -13,6 +15,20 @@ const adminLinks = [
 ];
 
 export default function AdminDashboard() {
+    const [, setLocation] = useLocation();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    async function handleLogout() {
+        setIsLoggingOut(true);
+        try {
+            await fetch("/api/auth/logout", { method: "POST" });
+            setLocation("/admin/login");
+        } catch {
+            // Still redirect on error - cookie may be cleared anyway
+            setLocation("/admin/login");
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-6xl mx-auto">
@@ -21,9 +37,24 @@ export default function AdminDashboard() {
                         <h1 className="text-3xl font-heading font-black text-primary">Admin Backdoor</h1>
                         <p className="text-gray-600">Welcome back, Hank! What would you like to update today?</p>
                     </div>
-                    <Link href="/">
-                        <Button variant="outline">Back to Website</Button>
-                    </Link>
+                    <div className="flex gap-3">
+                        <Link href="/">
+                            <Button variant="outline">Back to Website</Button>
+                        </Link>
+                        <Button
+                            variant="outline"
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                            {isLoggingOut ? (
+                                <Spinner className="mr-2" />
+                            ) : (
+                                <LogOut className="w-4 h-4 mr-2" />
+                            )}
+                            Logout
+                        </Button>
+                    </div>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

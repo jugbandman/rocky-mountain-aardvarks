@@ -63,7 +63,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Redirect to /admin on success",
     "Add logout button to AdminDashboard"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
