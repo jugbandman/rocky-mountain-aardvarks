@@ -15,7 +15,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Create local D1 database",
     "Verify /api/testimonials returns JSON"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 

@@ -5,11 +5,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
+    "dev:full": "wrangler pages dev dist/public --d1=DB --compatibility-date=2024-01-01 --port=8788 --persist-to=.wrangler/state",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js",
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:migrate": "wrangler d1 execute DB --local --file=drizzle/0000_strong_johnny_storm.sql --persist-to=.wrangler/state"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.6",
