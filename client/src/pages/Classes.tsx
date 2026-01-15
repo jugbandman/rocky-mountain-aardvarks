@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import type { Class, Location } from "@shared/schema";
 import { format, isWithinInterval } from "date-fns";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 interface SessionWithRelations {
     id: number;
@@ -133,43 +135,53 @@ export default function Classes() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-light pb-20">
-                <section className="bg-navy text-white py-16 px-4 text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-                        <Music className="absolute top-10 left-10 w-24 h-24 rotate-12" />
-                        <Music className="absolute bottom-10 right-10 w-32 h-32 -rotate-12" />
+            <div className="min-h-screen flex flex-col bg-light">
+                <Navbar />
+                <main className="flex-grow pb-20">
+                    <section className="bg-navy text-white py-16 px-4 text-center relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                            <Music className="absolute top-10 left-10 w-24 h-24 rotate-12" />
+                            <Music className="absolute bottom-10 right-10 w-32 h-32 -rotate-12" />
+                        </div>
+                        <h1 className="text-5xl font-heading font-black mb-4 relative z-10">Class Schedule</h1>
+                        <p className="text-xl opacity-90 max-w-2xl mx-auto relative z-10">
+                            Find the perfect rhythm for your family.
+                        </p>
+                    </section>
+                    <div className="flex justify-center items-center py-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                        <span className="ml-3 text-gray-600">Loading schedule...</span>
                     </div>
-                    <h1 className="text-5xl font-heading font-black mb-4 relative z-10">Class Schedule</h1>
-                    <p className="text-xl opacity-90 max-w-2xl mx-auto relative z-10">
-                        Find the perfect rhythm for your family.
-                    </p>
-                </section>
-                <div className="flex justify-center items-center py-20">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                    <span className="ml-3 text-gray-600">Loading schedule...</span>
-                </div>
+                </main>
+                <Footer />
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-light pb-20">
-                <section className="bg-navy text-white py-16 px-4 text-center">
-                    <h1 className="text-5xl font-heading font-black mb-4">Class Schedule</h1>
-                </section>
-                <div className="max-w-2xl mx-auto py-20 px-4">
-                    <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-lg">
-                        <AlertCircle className="w-5 h-5" />
-                        <span>Unable to load schedule. Please try again later.</span>
+            <div className="min-h-screen flex flex-col bg-light">
+                <Navbar />
+                <main className="flex-grow pb-20">
+                    <section className="bg-navy text-white py-16 px-4 text-center">
+                        <h1 className="text-5xl font-heading font-black mb-4">Class Schedule</h1>
+                    </section>
+                    <div className="max-w-2xl mx-auto py-20 px-4">
+                        <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-lg">
+                            <AlertCircle className="w-5 h-5" />
+                            <span>Unable to load schedule. Please try again later.</span>
+                        </div>
                     </div>
-                </div>
+                </main>
+                <Footer />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-light pb-20">
+        <div className="min-h-screen flex flex-col bg-light">
+            <Navbar />
+            <main className="flex-grow pb-20">
             {/* Hero */}
             <section className="bg-navy text-white py-16 px-4 text-center relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
@@ -373,6 +385,8 @@ export default function Classes() {
                     </Tabs>
                 )}
             </div>
+            </main>
+            <Footer />
         </div>
     );
 }

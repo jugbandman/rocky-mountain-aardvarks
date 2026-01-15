@@ -2,6 +2,8 @@ import { useApi } from "@/hooks/useApi";
 import { Loader2, AlertCircle, User } from "lucide-react";
 import { Link } from "wouter";
 import type { Teacher } from "@shared/schema";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function Teachers() {
     const { data: teachers, loading, error } = useApi<Teacher[]>("/teachers");
@@ -13,39 +15,49 @@ export default function Teachers() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-light">
-                <section className="bg-primary text-white py-20 px-4 text-center">
-                    <h1 className="text-5xl font-heading font-black mb-4">Meet Our Teachers</h1>
-                    <p className="max-w-2xl mx-auto text-xl opacity-90">
-                        Our instructors are not just musicians, but passionate educators dedicated to making music fun and accessible for every child.
-                    </p>
-                </section>
-                <div className="flex justify-center items-center py-20">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                    <span className="ml-3 text-gray-600">Loading teachers...</span>
-                </div>
+            <div className="min-h-screen flex flex-col bg-light">
+                <Navbar />
+                <main className="flex-grow">
+                    <section className="bg-primary text-white py-20 px-4 text-center">
+                        <h1 className="text-5xl font-heading font-black mb-4">Meet Our Teachers</h1>
+                        <p className="max-w-2xl mx-auto text-xl opacity-90">
+                            Our instructors are not just musicians, but passionate educators dedicated to making music fun and accessible for every child.
+                        </p>
+                    </section>
+                    <div className="flex justify-center items-center py-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                        <span className="ml-3 text-gray-600">Loading teachers...</span>
+                    </div>
+                </main>
+                <Footer />
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-light">
-                <section className="bg-primary text-white py-20 px-4 text-center">
-                    <h1 className="text-5xl font-heading font-black mb-4">Meet Our Teachers</h1>
-                </section>
-                <div className="max-w-2xl mx-auto py-20 px-4">
-                    <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-lg">
-                        <AlertCircle className="w-5 h-5" />
-                        <span>Unable to load teachers. Please try again later.</span>
+            <div className="min-h-screen flex flex-col bg-light">
+                <Navbar />
+                <main className="flex-grow">
+                    <section className="bg-primary text-white py-20 px-4 text-center">
+                        <h1 className="text-5xl font-heading font-black mb-4">Meet Our Teachers</h1>
+                    </section>
+                    <div className="max-w-2xl mx-auto py-20 px-4">
+                        <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-lg">
+                            <AlertCircle className="w-5 h-5" />
+                            <span>Unable to load teachers. Please try again later.</span>
+                        </div>
                     </div>
-                </div>
+                </main>
+                <Footer />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-light">
+        <div className="min-h-screen flex flex-col bg-light">
+            <Navbar />
+            <main className="flex-grow">
             {/* Hero Section */}
             <section className="bg-primary text-white py-20 px-4 text-center">
                 <h1 className="text-5xl font-heading font-black mb-4">Meet Our Teachers</h1>
@@ -104,6 +116,8 @@ export default function Teachers() {
                     </button>
                 </Link>
             </section>
+            </main>
+            <Footer />
         </div>
     );
 }
