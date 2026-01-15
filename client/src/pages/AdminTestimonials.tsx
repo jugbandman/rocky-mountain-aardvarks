@@ -4,12 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Star } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Star, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
 import type { Testimonial } from "@shared/schema";
 
+function StarRating({ value, onChange }: { value: number; onChange: (stars: number) => void }) {
+    return (
+        <div className="flex gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                    key={star}
+                    type="button"
+                    onClick={() => onChange(star)}
+                    className="p-0.5 hover:scale-110 transition-transform"
+                >
+                    <Star
+                        className={`w-6 h-6 ${star <= value ? "text-yellow-500 fill-current" : "text-gray-300"}`}
+                    />
+                </button>
+            ))}
+        </div>
+    );
+}
+
 export default function AdminTestimonials() {
-    const { data: testimonials, loading } = useApi<Testimonial[]>("/testimonials");
+    const { data: testimonials, loading, error } = useApi<Testimonial[]>("/testimonials");
     const [editingTestimonial, setEditingTestimonial] = useState<Partial<Testimonial> | null>(null);
 
     const handleSave = async () => {
@@ -34,6 +54,17 @@ export default function AdminTestimonials() {
 
     if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin" /></div>;
 
+    if (error) return (
+        <div className="min-h-screen bg-gray-50 p-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-lg">
+                    <AlertCircle className="w-5 h-5" />
+                    <span>Failed to load testimonials: {error.message}</span>
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-4xl mx-auto">
@@ -54,8 +85,13 @@ export default function AdminTestimonials() {
                         <Card key={testimonial.id}>
                             <CardContent className="p-6">
                                 <div className="flex justify-between items-start mb-4">
-                                    <div className="flex gap-1 text-yellow-500">
-                                        {[...Array(testimonial.stars || 5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex gap-0.5 text-yellow-500">
+                                            {[...Array(testimonial.stars || 5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                                        </div>
+                                        <span className={`text-xs px-2 py-0.5 rounded-full ${testimonial.active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                                            {testimonial.active ? "Active" : "Inactive"}
+                                        </span>
                                     </div>
                                     <div className="flex gap-2">
                                         <Button variant="outline" size="icon" onClick={() => setEditingTestimonial(testimonial)}>
@@ -89,15 +125,28 @@ export default function AdminTestimonials() {
                                     <label className="text-sm font-bold">Quote</label>
                                     <Textarea value={editingTestimonial.quote} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, quote: e.target.value })} />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="text-sm font-bold">Stars</label>
-                                        <Input type="number" min="1" max="5" value={editingTestimonial.stars || 5} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, stars: parseInt(e.target.value) })} />
-                                    </div>
-                                    <div>
-                                        <label className="text-sm font-bold">Source</label>
-                                        <Input value={editingTestimonial.source || ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, source: e.target.value })} />
-                                    </div>
+                                <div>
+                                    <label className="text-sm font-bold block mb-2">Stars</label>
+                                    <StarRating
+                                        value={editingTestimonial.stars || 5}
+                                        onChange={(stars) => setEditingTestimonial({ ...editingTestimonial, stars })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-sm font-bold">Source (optional)</label>
+                                    <Input
+                                        placeholder="e.g. Google, Yelp"
+                                        value={editingTestimonial.source || ""}
+                                        onChange={(e) => setEditingTestimonial({ ...editingTestimonial, source: e.target.value })}
+                                    />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Checkbox
+                                        id="active"
+                                        checked={editingTestimonial.active ?? true}
+                                        onCheckedChange={(checked) => setEditingTestimonial({ ...editingTestimonial, active: checked === true })}
+                                    />
+                                    <label htmlFor="active" className="text-sm font-bold cursor-pointer">Active</label>
                                 </div>
                                 <div className="flex justify-end gap-3 pt-4">
                                     <Button variant="outline" onClick={() => setEditingTestimonial(null)}>Cancel</Button>
