@@ -1,11 +1,25 @@
 # Ralph Activity Log
 
 ## Current Status
-- Last updated: 2026-01-14 19:42
-- Tasks completed: 2/14
-- Current task: 2.1 (Add password protection middleware)
+- Last updated: 2026-01-14 19:55
+- Tasks completed: 3/14
+- Current task: 2.2 (Build login page UI)
 
 ## Session Log
+
+### 2026-01-14 19:55 - Task 2.1 Complete
+- Added AUTH_PASSWORD to Bindings type
+- Created .dev.vars for local development secrets
+- Updated .env.example with instructions for .dev.vars
+- Added .dev.vars to .gitignore
+- Implemented auth endpoints:
+  - POST /api/auth/login - validates password, sets session cookie
+  - POST /api/auth/logout - clears session cookie
+  - GET /api/auth/status - checks auth status
+- Added middleware protecting /api/admin/* routes
+- Added admin CRUD routes for all entities (teachers, locations, testimonials, classes, sessions, content)
+- TypeScript check passes
+- Next: Task 2.2 - Build login page UI
 
 ### 2026-01-14 19:42 - Task 1.2 Complete
 - Updated drizzle/seed.sql with real data

@@ -6,3 +6,7 @@ binding = "DB"
 database_name = "aardvarks-db"
 database_id = "00000000-0000-0000-0000-000000000000" # User will need to run wrangler d1 create
 migrations_dir = "drizzle"
+
+[vars]
+# AUTH_PASSWORD should be set in Cloudflare dashboard for production
+# For local dev, use .dev.vars file

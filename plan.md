@@ -48,7 +48,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Create POST /api/auth/login endpoint",
     "Create POST /api/auth/logout endpoint"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
