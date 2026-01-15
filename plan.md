@@ -110,7 +110,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Add Location form (name, address, lat, lng)",
     "Edit and delete functionality"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
