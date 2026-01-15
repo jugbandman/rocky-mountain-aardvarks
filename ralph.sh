@@ -16,8 +16,8 @@ for i in $(seq 1 $MAX_ITERATIONS); do
     echo "🔄 Iteration $i of $MAX_ITERATIONS"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-    # Run Claude with the prompt file
-    OUTPUT=$(claude -p "$(cat PROMPT.md)" 2>&1)
+    # Run Claude with the prompt file (skip permissions for autonomous mode)
+    OUTPUT=$(claude --dangerously-skip-permissions -p "$(cat PROMPT.md)" 2>&1)
 
     # Show output
     echo "$OUTPUT"
