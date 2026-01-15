@@ -96,7 +96,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Star rating input component",
     "Edit and delete functionality"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
