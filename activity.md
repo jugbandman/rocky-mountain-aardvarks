@@ -1,11 +1,23 @@
 # Ralph Activity Log
 
 ## Current Status
-- Last updated: 2026-01-14 20:45
-- Tasks completed: 7/14
-- Current task: 3.4 (AdminClasses CRUD)
+- Last updated: 2026-01-14 20:50
+- Tasks completed: 8/14
+- Current task: 3.5 (AdminSessions CRUD)
 
 ## Session Log
+
+### 2026-01-14 20:50 - Task 3.4 Complete
+- Enhanced AdminClasses with full CRUD functionality
+- Price input in dollars, stored as cents (centsToDollars/dollarsToCents helpers)
+- Shows image if provided, fallback to BookOpen icon
+- Uses shadcn Dialog/AlertDialog components
+- Uses refetch() instead of window.location.reload()
+- Added loading spinners during save/delete operations
+- Added form validation and error display
+- Added empty state when no classes exist
+- TypeScript check passes
+- Next: Task 3.5 - AdminSessions CRUD
 
 ### 2026-01-14 20:45 - Task 3.3 Complete
 - Enhanced AdminLocations with full CRUD functionality

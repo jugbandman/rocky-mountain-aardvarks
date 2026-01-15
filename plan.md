@@ -125,7 +125,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Price displayed as dollars (stored cents)",
     "Edit and delete functionality"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
