@@ -81,7 +81,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Delete button with confirmation",
     "Loading and error states"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 

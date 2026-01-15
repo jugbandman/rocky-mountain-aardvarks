@@ -1,11 +1,20 @@
 # Ralph Activity Log
 
 ## Current Status
-- Last updated: 2026-01-14 20:10
-- Tasks completed: 4/14
-- Current task: 3.1 (AdminTeachers CRUD)
+- Last updated: 2026-01-14 20:25
+- Tasks completed: 5/14
+- Current task: 3.2 (AdminTestimonials CRUD)
 
 ## Session Log
+
+### 2026-01-14 20:25 - Task 3.1 Complete
+- Enhanced AdminTeachers with full CRUD functionality
+- Added "active" checkbox toggle to teacher form
+- Added error state display with AlertCircle icon
+- Added active/inactive status badge on teacher cards (green/gray pill)
+- Updated Add Teacher button to include active: true default
+- TypeScript check passes
+- Next: Task 3.2 - AdminTestimonials CRUD
 
 ### 2026-01-14 20:10 - Task 2.2 Complete
 - Created AdminLogin page with password form
