@@ -1,0 +1,87 @@
+# Progress: Rocky Mountain Aardvarks Website Build
+
+## Overview
+Ralph Wiggum autonomous build for Hank Williams' music class website.
+Started: 2026-01-14
+
+---
+
+## Phase 1: Local Development Environment
+
+### Task 1.1: Wrangler Local D1 Setup
+- Status: NOT STARTED
+
+### Task 1.2: Seed Database with Real Data
+- Status: NOT STARTED
+
+---
+
+## Phase 2: Admin Authentication
+
+### Task 2.1: Password Protection Middleware
+- Status: NOT STARTED
+
+### Task 2.2: Login Page UI
+- Status: NOT STARTED
+
+---
+
+## Phase 3: Admin CRUD Forms
+
+### Task 3.1: AdminTeachers CRUD
+- Status: NOT STARTED
+
+### Task 3.2: AdminTestimonials CRUD
+- Status: NOT STARTED
+
+### Task 3.3: AdminLocations CRUD
+- Status: NOT STARTED
+
+### Task 3.4: AdminClasses CRUD
+- Status: NOT STARTED
+
+### Task 3.5: AdminSessions CRUD
+- Status: NOT STARTED
+
+### Task 3.6: AdminPages Content Editor
+- Status: NOT STARTED
+
+---
+
+## Phase 4: Public Pages Polish
+
+### Task 4.1: Teachers Page Data Integration
+- Status: NOT STARTED
+
+### Task 4.2: Classes/Schedule Page
+- Status: NOT STARTED
+
+### Task 4.3: Locations Page with Map
+- Status: NOT STARTED
+
+### Task 4.4: About/Our Story Page
+- Status: NOT STARTED
+
+---
+
+## Phase 5: Registration Flow
+
+### Task 5.1: Registration Form UI
+- Status: NOT STARTED
+
+### Task 5.2: Stripe Checkout Integration
+- Status: NOT STARTED (HITL Required)
+
+---
+
+## Phase 6: Content Migration
+
+### Task 6.1: Import Current Site Content
+- Status: NOT STARTED
+
+---
+
+## Notes
+- Dev server runs on http://localhost:3000
+- API requires Cloudflare D1 bindings (Phase 1 fixes this)
+- Admin pages scaffolded but not functional yet
