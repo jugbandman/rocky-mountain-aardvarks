@@ -1,11 +1,22 @@
 # Ralph Activity Log
 
 ## Current Status
-- Last updated: 2026-01-14 19:37
-- Tasks completed: 1/14
-- Current task: 1.2 (Seed database with real data)
+- Last updated: 2026-01-14 19:42
+- Tasks completed: 2/14
+- Current task: 2.1 (Add password protection middleware)
 
 ## Session Log
+
+### 2026-01-14 19:42 - Task 1.2 Complete
+- Updated drizzle/seed.sql with real data
+- Added `db:seed` script to package.json
+- Seeded database with:
+  - 2 teachers (Hank Williams, Brian Johnson)
+  - 3 locations (Washington Park, Cherry Creek, Boulder)
+  - 5 testimonials with ratings
+- Verified all API endpoints return seeded data
+- TypeScript check passes
+- Next: Task 2.1 - Add password protection middleware
 
 ### 2026-01-14 19:37 - Task 1.1 Complete
 - Added `dev:full` script to package.json using wrangler pages dev with D1 binding

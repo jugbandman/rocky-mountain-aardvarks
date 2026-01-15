@@ -11,7 +11,8 @@
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
-    "db:migrate": "wrangler d1 execute DB --local --file=drizzle/0000_strong_johnny_storm.sql --persist-to=.wrangler/state"
+    "db:migrate": "wrangler d1 execute DB --local --file=drizzle/0000_strong_johnny_storm.sql --persist-to=.wrangler/state",
+    "db:seed": "wrangler d1 execute DB --local --file=drizzle/seed.sql --persist-to=.wrangler/state"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.6",

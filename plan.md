@@ -31,7 +31,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Add 5 testimonials",
     "Add pnpm db:seed command"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
