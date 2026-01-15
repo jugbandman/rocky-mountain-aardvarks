@@ -140,7 +140,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Date pickers for start/end",
     "Status dropdown (Open, Few Spots, Full, Waitlist)"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
@@ -155,7 +155,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Form: slug (readonly), title, content",
     "Show last updated timestamp"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
@@ -172,7 +172,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Display only active teachers",
     "Sort by displayOrder"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
@@ -187,6 +187,6 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Tab navigation between semesters",
     "Active tab clearly highlighted"
   ],
-  "passes": false
+  "passes": true
 }
 ```

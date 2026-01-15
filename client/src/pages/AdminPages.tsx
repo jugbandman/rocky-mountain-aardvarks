@@ -3,36 +3,184 @@ import { useApi } from "@/hooks/useApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, FileText } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, FileText, AlertCircle, Clock } from "lucide-react";
 import { Link } from "wouter";
 import type { PageContent } from "@shared/schema";
+import { format } from "date-fns";
+
+interface PageForm {
+    slug: string;
+    title: string;
+    content: string;
+}
+
+const emptyForm: PageForm = {
+    slug: "",
+    title: "",
+    content: "",
+};
 
 export default function AdminPages() {
-    const { data: pages, loading } = useApi<PageContent[]>("/content");
-    const [editingPage, setEditingPage] = useState<Partial<PageContent> | null>(null);
+    const { data: pages, loading, error, refetch } = useApi<PageContent[]>("/admin/content");
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
+    const [form, setForm] = useState<PageForm>(emptyForm);
+    const [saving, setSaving] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [formError, setFormError] = useState<string | null>(null);
+
+    const openAddDialog = () => {
+        setEditingId(null);
+        setForm(emptyForm);
+        setFormError(null);
+        setDialogOpen(true);
+    };
+
+    const openEditDialog = (page: PageContent) => {
+        setEditingId(page.id);
+        setForm({
+            slug: page.slug,
+            title: page.title,
+            content: page.content,
+        });
+        setFormError(null);
+        setDialogOpen(true);
+    };
+
+    const openDeleteDialog = (id: number) => {
+        setDeletingId(id);
+        setDeleteDialogOpen(true);
+    };
 
     const handleSave = async () => {
-        if (!editingPage) return;
-        const method = editingPage.id ? "PUT" : "POST";
-        const url = editingPage.id ? `/api/content/${editingPage.id}` : "/api/content";
+        if (!form.slug.trim()) {
+            setFormError("Slug is required");
+            return;
+        }
+        if (!form.title.trim()) {
+            setFormError("Title is required");
+            return;
+        }
+        if (!form.content.trim()) {
+            setFormError("Content is required");
+            return;
+        }
 
-        await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(editingPage),
-        });
-        setEditingPage(null);
-        window.location.reload();
+        // Validate slug format
+        if (!/^[a-z0-9-]+$/.test(form.slug)) {
+            setFormError("Slug must contain only lowercase letters, numbers, and hyphens");
+            return;
+        }
+
+        setSaving(true);
+        setFormError(null);
+
+        try {
+            const method = editingId ? "PUT" : "POST";
+            const url = editingId
+                ? `/api/admin/content/${editingId}`
+                : "/api/admin/content";
+
+            const payload = {
+                slug: form.slug,
+                title: form.title,
+                content: form.content,
+            };
+
+            const response = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const data: { error?: string } = await response.json();
+                throw new Error(data.error || "Failed to save page content");
+            }
+
+            setDialogOpen(false);
+            await refetch();
+        } catch (err) {
+            setFormError(err instanceof Error ? err.message : "Failed to save");
+        } finally {
+            setSaving(false);
+        }
     };
 
-    const handleDelete = async (id: number) => {
-        if (!confirm("Are you sure?")) return;
-        await fetch(`/api/content/${id}`, { method: "DELETE" });
-        window.location.reload();
+    const handleDelete = async () => {
+        if (!deletingId) return;
+
+        setDeleting(true);
+
+        try {
+            const response = await fetch(`/api/admin/content/${deletingId}`, {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                const data: { error?: string } = await response.json();
+                throw new Error(data.error || "Failed to delete page content");
+            }
+
+            setDeleteDialogOpen(false);
+            setDeletingId(null);
+            await refetch();
+        } catch (err) {
+            console.error("Delete failed:", err);
+        } finally {
+            setDeleting(false);
+        }
     };
 
-    if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin" /></div>;
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-gray-50 p-8">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-lg">
+                        <AlertCircle className="w-5 h-5" />
+                        <span>Failed to load page content: {error.message}</span>
+                    </div>
+                    <div className="mt-4">
+                        <Link href="/admin">
+                            <Button variant="outline">
+                                <ArrowLeft className="mr-2 w-4 h-4" /> Back to Dashboard
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
@@ -40,69 +188,165 @@ export default function AdminPages() {
                 <header className="flex justify-between items-center mb-8">
                     <div className="flex items-center gap-4">
                         <Link href="/admin">
-                            <Button variant="ghost" size="icon"><ArrowLeft /></Button>
+                            <Button variant="ghost" size="icon">
+                                <ArrowLeft />
+                            </Button>
                         </Link>
-                        <h1 className="text-3xl font-heading font-black text-primary">Manage Page Content</h1>
+                        <h1 className="text-3xl font-heading font-black text-primary">
+                            Manage Page Content
+                        </h1>
                     </div>
-                    <Button onClick={() => setEditingPage({ title: "", slug: "", content: "" })}>
-                        <Plus className="mr-2 w-4 h-4" /> Add Page content
+                    <Button onClick={openAddDialog}>
+                        <Plus className="mr-2 w-4 h-4" /> Add Content Block
                     </Button>
                 </header>
 
-                <div className="grid gap-6">
-                    {pages?.map((page) => (
-                        <Card key={page.id}>
-                            <CardContent className="flex items-center gap-6 p-6">
-                                <div className="w-12 h-12 rounded bg-primary/10 flex items-center justify-center shrink-0">
-                                    <FileText className="text-primary w-6 h-6" />
-                                </div>
-                                <div className="flex-grow">
-                                    <h3 className="text-xl font-bold">{page.title}</h3>
-                                    <p className="text-sm text-gray-400 font-mono">/{page.slug}</p>
-                                    <p className="text-gray-600 line-clamp-1 mt-1">{page.content}</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button variant="outline" size="icon" onClick={() => setEditingPage(page)}>
-                                        <Pencil className="w-4 h-4" />
-                                    </Button>
-                                    <Button variant="outline" size="icon" className="text-red-500 hover:text-red-700" onClick={() => handleDelete(page.id)}>
-                                        <Trash2 className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-
-                {editingPage && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                        <Card className="w-full max-w-2xl">
-                            <CardHeader>
-                                <CardTitle>{editingPage.id ? "Edit Content Block" : "Add Content Block"}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="text-sm font-bold">Title</label>
-                                        <Input value={editingPage.title} onChange={(e) => setEditingPage({ ...editingPage, title: e.target.value })} />
+                {pages?.length === 0 ? (
+                    <Card>
+                        <CardContent className="flex flex-col items-center justify-center py-12">
+                            <p className="text-gray-500 mb-4">No page content yet</p>
+                            <Button onClick={openAddDialog}>
+                                <Plus className="mr-2 w-4 h-4" /> Add Your First Content Block
+                            </Button>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <div className="grid gap-6">
+                        {pages?.map((page) => (
+                            <Card key={page.id}>
+                                <CardContent className="flex items-start gap-6 p-6">
+                                    <div className="w-12 h-12 rounded bg-primary/10 flex items-center justify-center shrink-0">
+                                        <FileText className="text-primary w-6 h-6" />
                                     </div>
-                                    <div>
-                                        <label className="text-sm font-bold">Slug</label>
-                                        <Input placeholder="e.g. refund-policy" value={editingPage.slug} onChange={(e) => setEditingPage({ ...editingPage, slug: e.target.value })} />
+                                    <div className="flex-grow min-w-0">
+                                        <h3 className="text-xl font-bold">{page.title}</h3>
+                                        <p className="text-sm text-gray-400 font-mono">/{page.slug}</p>
+                                        <p className="text-gray-600 line-clamp-2 mt-1">{page.content}</p>
+                                        {page.updatedAt && (
+                                            <div className="flex items-center gap-1 text-xs text-gray-400 mt-2">
+                                                <Clock className="w-3 h-3" />
+                                                Last updated: {format(new Date(page.updatedAt), "PPP 'at' p")}
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
-                                <div>
-                                    <label className="text-sm font-bold">HTML/Text Content</label>
-                                    <Textarea className="min-h-[300px] font-mono" value={editingPage.content} onChange={(e) => setEditingPage({ ...editingPage, content: e.target.value })} />
-                                </div>
-                                <div className="flex justify-end gap-3 pt-4">
-                                    <Button variant="outline" onClick={() => setEditingPage(null)}>Cancel</Button>
-                                    <Button onClick={handleSave}>Save Changes</Button>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => openEditDialog(page)}
+                                        >
+                                            <Pencil className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="text-red-500 hover:text-red-700"
+                                            onClick={() => openDeleteDialog(page.id)}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
                     </div>
                 )}
+
+                {/* Add/Edit Dialog */}
+                <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                    <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                            <DialogTitle>
+                                {editingId ? "Edit Content Block" : "Add New Content Block"}
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 py-4">
+                            {formError && (
+                                <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg text-sm">
+                                    <AlertCircle className="w-4 h-4" />
+                                    {formError}
+                                </div>
+                            )}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="title">Title *</Label>
+                                    <Input
+                                        id="title"
+                                        value={form.title}
+                                        onChange={(e) => setForm({ ...form, title: e.target.value })}
+                                        placeholder="e.g. Refund Policy"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="slug">
+                                        Slug * {editingId && <span className="text-gray-400 font-normal">(readonly)</span>}
+                                    </Label>
+                                    <Input
+                                        id="slug"
+                                        value={form.slug}
+                                        onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase() })}
+                                        placeholder="e.g. refund-policy"
+                                        readOnly={!!editingId}
+                                        className={editingId ? "bg-gray-100 cursor-not-allowed" : ""}
+                                    />
+                                    {!editingId && (
+                                        <p className="text-xs text-gray-500">
+                                            Used in URL: /page/{form.slug || "your-slug"}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="content">HTML/Markdown Content *</Label>
+                                <Textarea
+                                    id="content"
+                                    className="min-h-[300px] font-mono text-sm"
+                                    value={form.content}
+                                    onChange={(e) => setForm({ ...form, content: e.target.value })}
+                                    placeholder="Enter your page content here. You can use HTML or plain text."
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => setDialogOpen(false)}
+                                disabled={saving}
+                            >
+                                Cancel
+                            </Button>
+                            <Button onClick={handleSave} disabled={saving}>
+                                {saving && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
+                                {editingId ? "Save Changes" : "Add Content"}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Delete Confirmation Dialog */}
+                <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Content Block?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete this
+                                content block. Pages referencing this slug will no longer display
+                                content.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={handleDelete}
+                                disabled={deleting}
+                                className="bg-red-600 hover:bg-red-700"
+                            >
+                                {deleting && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
+                                Delete
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </div>
     );
