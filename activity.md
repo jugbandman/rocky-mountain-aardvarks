@@ -1,11 +1,25 @@
 # Ralph Activity Log
 
 ## Current Status
-- Last updated: 2026-01-15 11:15
-- Tasks completed: 14/14 (COMPLETE)
-- Current task: All tasks complete
+- Last updated: 2026-01-21
+- Tasks completed: 15/22
+- Current task: Task 4.3 Complete, Next: Task 4.4
 
 ## Session Log
+
+### 2026-01-21 - Task 4.3 Complete
+- Task 4.3: Locations page with Google Map (OPT-109)
+- Added Google Map integration using existing MapView component
+- Map displays markers for all locations with lat/lng coordinates
+- Custom styled markers with location names
+- Click marker shows location details in popup overlay
+- Location cards are clickable and pan/zoom map to that location
+- Selected location highlighted with ring styling
+- Address links now use directions API (dir/?api=1&destination=)
+- Responsive design: map 400px on mobile, 500px on desktop
+- Map only shows if at least one location has coordinates
+- TypeScript check passes
+- Next: Task 4.4 - About/Our Story page
 
 ### 2026-01-15 11:15 - All Tasks Complete
 - Task 3.5: AdminSessions CRUD - Full rewrite with Dialog/AlertDialog, date pickers (Popover + Calendar), proper error handling, refetch() pattern

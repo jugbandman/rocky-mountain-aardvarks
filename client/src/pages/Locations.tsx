@@ -1,12 +1,94 @@
 import { useApi } from "@/hooks/useApi";
-import { Loader2, MapPin, Phone, Mail, Clock, AlertCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import { Loader2, MapPin, Phone, Mail, Clock, AlertCircle, X } from "lucide-react";
 import { Link } from "wouter";
 import type { Location } from "@shared/schema";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MapView } from "@/components/Map";
+
+// Denver area center for map default
+const DENVER_CENTER = { lat: 39.7392, lng: -104.9903 };
 
 export default function Locations() {
     const { data: locations, loading, error } = useApi<Location[]>("/locations");
+    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+    const mapRef = useRef<google.maps.Map | null>(null);
+    const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
+
+    const handleMapReady = (map: google.maps.Map) => {
+        mapRef.current = map;
+        addMarkersToMap(map);
+    };
+
+    const addMarkersToMap = (map: google.maps.Map) => {
+        // Clear existing markers
+        markersRef.current.forEach(marker => marker.map = null);
+        markersRef.current = [];
+
+        if (!locations || locations.length === 0) return;
+
+        const bounds = new google.maps.LatLngBounds();
+        let hasValidCoords = false;
+
+        locations.forEach((location) => {
+            if (location.lat && location.lng) {
+                hasValidCoords = true;
+                const position = { lat: location.lat, lng: location.lng };
+                bounds.extend(position);
+
+                // Create custom marker content
+                const markerContent = document.createElement('div');
+                markerContent.innerHTML = `
+                    <div class="bg-primary text-white px-3 py-2 rounded-full shadow-lg cursor-pointer hover:bg-primary/90 transition-all flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        <span class="font-bold text-sm whitespace-nowrap">${location.name}</span>
+                    </div>
+                `;
+
+                const marker = new google.maps.marker.AdvancedMarkerElement({
+                    map,
+                    position,
+                    title: location.name,
+                    content: markerContent,
+                });
+
+                marker.addListener('click', () => {
+                    setSelectedLocation(location);
+                    map.panTo(position);
+                });
+
+                markersRef.current.push(marker);
+            }
+        });
+
+        // Fit bounds if we have valid coordinates
+        if (hasValidCoords && markersRef.current.length > 0) {
+            if (markersRef.current.length === 1) {
+                // Single location - just center on it
+                map.setCenter(bounds.getCenter());
+                map.setZoom(14);
+            } else {
+                map.fitBounds(bounds, 50);
+            }
+        }
+    };
+
+    // Re-add markers when locations change
+    if (mapRef.current && locations && !loading) {
+        addMarkersToMap(mapRef.current);
+    }
+
+    const handleLocationCardClick = (location: Location) => {
+        setSelectedLocation(location);
+        if (mapRef.current && location.lat && location.lng) {
+            mapRef.current.panTo({ lat: location.lat, lng: location.lng });
+            mapRef.current.setZoom(15);
+        }
+    };
 
     if (loading) {
         return (
@@ -48,6 +130,8 @@ export default function Locations() {
 
     // All locations from API are assumed active
     const activeLocations = locations;
+    // Check if any locations have coordinates for the map
+    const locationsWithCoords = activeLocations?.filter(l => l.lat && l.lng) || [];
 
     return (
         <div className="min-h-screen flex flex-col bg-light">
@@ -61,6 +145,52 @@ export default function Locations() {
                     </p>
                 </section>
 
+                {/* Google Map Section */}
+                {locationsWithCoords.length > 0 && (
+                    <section className="max-w-6xl mx-auto py-8 px-4">
+                        <div className="relative rounded-3xl overflow-hidden shadow-xl">
+                            <MapView
+                                className="h-[400px] md:h-[500px]"
+                                initialCenter={
+                                    locationsWithCoords[0]?.lat && locationsWithCoords[0]?.lng
+                                        ? { lat: locationsWithCoords[0].lat, lng: locationsWithCoords[0].lng }
+                                        : DENVER_CENTER
+                                }
+                                initialZoom={11}
+                                onMapReady={handleMapReady}
+                            />
+                            {/* Selected location popup overlay */}
+                            {selectedLocation && (
+                                <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white rounded-2xl shadow-2xl p-4 z-10">
+                                    <button
+                                        onClick={() => setSelectedLocation(null)}
+                                        className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                                    >
+                                        <X className="w-4 h-4 text-gray-500" />
+                                    </button>
+                                    <h3 className="text-xl font-heading font-bold text-navy mb-2 pr-6">{selectedLocation.name}</h3>
+                                    <p className="text-gray-600 mb-4">{selectedLocation.address}</p>
+                                    <div className="flex gap-2 flex-wrap">
+                                        <Link href="/classes">
+                                            <button className="bg-navy text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-navy/80 transition-all">
+                                                View Schedule
+                                            </button>
+                                        </Link>
+                                        <a
+                                            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(selectedLocation.address)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="bg-primary text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-primary/80 transition-all"
+                                        >
+                                            Get Directions
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                )}
+
                 {/* Locations List */}
                 <section className="max-w-6xl mx-auto py-16 px-4">
                     {activeLocations && activeLocations.length === 0 ? (
@@ -71,24 +201,35 @@ export default function Locations() {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {activeLocations?.map((location) => (
-                                <div key={location.id} className="bg-white rounded-3xl p-8 shadow-xl flex gap-6 hover:shadow-2xl transition-all group">
-                                    <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
+                                <div
+                                    key={location.id}
+                                    className={`bg-white rounded-3xl p-8 shadow-xl flex gap-6 hover:shadow-2xl transition-all group cursor-pointer ${
+                                        selectedLocation?.id === location.id ? 'ring-2 ring-primary ring-offset-2' : ''
+                                    }`}
+                                    onClick={() => handleLocationCardClick(location)}
+                                >
+                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 transition-all ${
+                                        selectedLocation?.id === location.id
+                                            ? 'bg-primary text-white'
+                                            : 'bg-primary/10 group-hover:bg-primary group-hover:text-white'
+                                    }`}>
                                         <MapPin className="w-8 h-8" />
                                     </div>
                                     <div className="flex-grow">
                                         <h2 className="text-2xl font-heading font-black text-navy mb-2">{location.name}</h2>
                                         <p className="text-lg text-gray-600 mb-6">{location.address}</p>
-                                        <div className="flex gap-4">
-                                            <Link href="/classes">
+                                        <div className="flex gap-4 flex-wrap">
+                                            <Link href="/classes" onClick={(e) => e.stopPropagation()}>
                                                 <button className="bg-navy text-white px-6 py-2 rounded-full font-bold hover:bg-navy/80 transition-all">
                                                     View Schedule
                                                 </button>
                                             </Link>
                                             <a
-                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`}
+                                                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location.address)}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-primary font-bold hover:underline flex items-center gap-1"
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 Get Directions
                                             </a>

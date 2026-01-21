@@ -143,7 +143,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Click marker shows location details",
     "Address links to Google Maps directions"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
