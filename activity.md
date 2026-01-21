@@ -2,10 +2,24 @@
 
 ## Current Status
 - Last updated: 2026-01-21
-- Tasks completed: 15/22
-- Current task: Task 4.3 Complete, Next: Task 4.4
+- Tasks completed: 16/22
+- Current task: Task 4.4 Complete, Next: Task 5.1
 
 ## Session Log
+
+### 2026-01-21 - Task 4.4 Complete
+- Task 4.4: About/Our Story page (OPT-110)
+- Created /about route in App.tsx
+- Created About.tsx page component
+- Fetches content from /api/content/our-story using useApi hook
+- Renders HTML content with prose styling
+- Loading state with spinner
+- Error state with alert message
+- Empty state when no content exists
+- Added "About" link to Navbar (placed after Home)
+- Responsive design matching other pages
+- TypeScript check passes
+- Next: Task 5.1 - Contact page with form
 
 ### 2026-01-21 - Task 4.3 Complete
 - Task 4.3: Locations page with Google Map (OPT-109)

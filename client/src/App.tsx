@@ -17,6 +17,7 @@ import AdminClasses from "./pages/AdminClasses";
 import AdminSessions from "./pages/AdminSessions";
 import AdminPages from "./pages/AdminPages";
 import AdminLogin from "./pages/AdminLogin";
+import About from "./pages/About";
 
 
 function Router() {
@@ -27,6 +28,7 @@ function Router() {
       <Route path={"/classes"} component={Classes} />
       <Route path={"/testimonials"} component={Testimonials} />
       <Route path={"/locations"} component={Locations} />
+      <Route path={"/about"} component={About} />
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/admin/login"} component={AdminLogin} />
       <Route path={"/admin/teachers"} component={AdminTeachers} />

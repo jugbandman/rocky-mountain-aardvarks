@@ -159,7 +159,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Render markdown/HTML content",
     "Add navigation link in Navbar"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
