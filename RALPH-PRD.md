@@ -2,6 +2,8 @@
 
 Build guide using autonomous Claude Code loops with clear completion criteria.
 
+**Linear Project:** [Rocky Mountain Aardvarks Website](https://linear.app/overphlowtank/project/rocky-mountain-aardvarks-website-308508a0195b)
+
 ---
 
 ## Philosophy
@@ -16,6 +18,37 @@ From the Ralph Wiggum Technique:
 3. **End-to-end** - Build vertically, not layer by layer
 4. **Feedback loops** - Lint/type checks must pass before commit
 5. **Progress tracking** - Commit often, append to progress.txt
+
+---
+
+## Linear Issue Map
+
+| Phase | Task | Linear ID | Description |
+|-------|------|-----------|-------------|
+| 1.1 | Wrangler D1 Setup | [OPT-97](https://linear.app/overphlowtank/issue/OPT-97) | Local dev environment |
+| 1.2 | Seed Database | [OPT-98](https://linear.app/overphlowtank/issue/OPT-98) | Real data for dev |
+| 2.1 | Auth Middleware | [OPT-99](https://linear.app/overphlowtank/issue/OPT-99) | Password protection |
+| 2.2 | Login UI | [OPT-100](https://linear.app/overphlowtank/issue/OPT-100) | Admin login page |
+| 3.1 | AdminTeachers | [OPT-101](https://linear.app/overphlowtank/issue/OPT-101) | Teacher CRUD |
+| 3.2 | AdminTestimonials | [OPT-102](https://linear.app/overphlowtank/issue/OPT-102) | Testimonial CRUD |
+| 3.3 | AdminLocations | [OPT-103](https://linear.app/overphlowtank/issue/OPT-103) | Location CRUD |
+| 3.4 | AdminClasses | [OPT-104](https://linear.app/overphlowtank/issue/OPT-104) | Class CRUD |
+| 3.5 | AdminSessions | [OPT-105](https://linear.app/overphlowtank/issue/OPT-105) | Session CRUD |
+| 3.6 | AdminPages | [OPT-106](https://linear.app/overphlowtank/issue/OPT-106) | Content editor |
+| 4.1 | Teachers Page | [OPT-107](https://linear.app/overphlowtank/issue/OPT-107) | Data integration |
+| 4.2 | Classes Page | [OPT-108](https://linear.app/overphlowtank/issue/OPT-108) | Schedule + tabs |
+| 4.3 | Locations Page | [OPT-109](https://linear.app/overphlowtank/issue/OPT-109) | Google Maps |
+| 4.4 | About Page | [OPT-110](https://linear.app/overphlowtank/issue/OPT-110) | Our Story |
+| - | Contact Page | [OPT-111](https://linear.app/overphlowtank/issue/OPT-111) | Contact form |
+| - | Photo Gallery | [OPT-112](https://linear.app/overphlowtank/issue/OPT-112) | Gallery + admin |
+| - | MailChimp | [OPT-113](https://linear.app/overphlowtank/issue/OPT-113) | Newsletter signup |
+| 5.1 | Registration UI | [OPT-114](https://linear.app/overphlowtank/issue/OPT-114) | Registration form |
+| 5.2 | Stripe (HITL) | [OPT-115](https://linear.app/overphlowtank/issue/OPT-115) | Payment checkout |
+| 6 | Content Migration | [OPT-116](https://linear.app/overphlowtank/issue/OPT-116) | Import real data |
+
+**Parent PRDs:**
+- [OPT-96: Site Architecture & Navigation](https://linear.app/overphlowtank/issue/OPT-96) - UI/UX stories
+- [OPT-78: MSS Integration Strategy](https://linear.app/overphlowtank/issue/OPT-78) - Registration/workflow stories
 
 ---
 
@@ -37,7 +70,7 @@ These decisions are already made. Documented here for context.
 
 ### Phase 1: Local Development Environment (Ralph-Ready)
 
-#### Task 1.1: Wrangler Local D1 Setup
+#### Task 1.1: Wrangler Local D1 Setup - [OPT-97](https://linear.app/overphlowtank/issue/OPT-97)
 ```
 COMPLETION CRITERIA:
 - [ ] wrangler.toml configured for local D1
@@ -48,7 +81,7 @@ COMPLETION CRITERIA:
 - [ ] pnpm check passes
 ```
 
-#### Task 1.2: Seed Database with Real Data
+#### Task 1.2: Seed Database with Real Data - [OPT-98](https://linear.app/overphlowtank/issue/OPT-98)
 ```
 COMPLETION CRITERIA:
 - [ ] drizzle/seed.ts file created
@@ -65,7 +98,7 @@ COMPLETION CRITERIA:
 
 ### Phase 2: Admin Authentication (Ralph-Ready)
 
-#### Task 2.1: Password Protection Middleware
+#### Task 2.1: Password Protection Middleware - [OPT-99](https://linear.app/overphlowtank/issue/OPT-99)
 ```
 COMPLETION CRITERIA:
 - [ ] AUTH_PASSWORD env var documented in .env.example
@@ -76,7 +109,7 @@ COMPLETION CRITERIA:
 - [ ] No hardcoded passwords in code
 ```
 
-#### Task 2.2: Login Page UI
+#### Task 2.2: Login Page UI - [OPT-100](https://linear.app/overphlowtank/issue/OPT-100)
 ```
 COMPLETION CRITERIA:
 - [ ] /admin redirects to /admin/login if not authenticated
@@ -93,7 +126,8 @@ COMPLETION CRITERIA:
 
 Each admin page needs: list view, create form, edit form, delete confirmation.
 
-#### Task 3.1: AdminTeachers CRUD
+#### Task 3.1: AdminTeachers CRUD - [OPT-101](https://linear.app/overphlowtank/issue/OPT-101)
+**Enables:** [OPT-91](https://linear.app/overphlowtank/issue/OPT-91) (Instructors/About Page)
 ```
 COMPLETION CRITERIA:
 - [ ] Lists all teachers in card/table view
@@ -110,7 +144,8 @@ COMPLETION CRITERIA:
 - [ ] Error toast on failure
 ```
 
-#### Task 3.2: AdminTestimonials CRUD
+#### Task 3.2: AdminTestimonials CRUD - [OPT-102](https://linear.app/overphlowtank/issue/OPT-102)
+**Enables:** [OPT-90](https://linear.app/overphlowtank/issue/OPT-90) (Testimonials & Social Proof)
 ```
 COMPLETION CRITERIA:
 - [ ] Lists all testimonials in card view
@@ -122,7 +157,8 @@ COMPLETION CRITERIA:
 - [ ] Shows star rating visually in list
 ```
 
-#### Task 3.3: AdminLocations CRUD
+#### Task 3.3: AdminLocations CRUD - [OPT-103](https://linear.app/overphlowtank/issue/OPT-103)
+**Enables:** [OPT-82](https://linear.app/overphlowtank/issue/OPT-82) (Location Management)
 ```
 COMPLETION CRITERIA:
 - [ ] Lists all locations with address
@@ -133,7 +169,8 @@ COMPLETION CRITERIA:
 - [ ] Map preview of location (optional)
 ```
 
-#### Task 3.4: AdminClasses CRUD
+#### Task 3.4: AdminClasses CRUD - [OPT-104](https://linear.app/overphlowtank/issue/OPT-104)
+**Enables:** [OPT-84](https://linear.app/overphlowtank/issue/OPT-84) (Class Descriptions - 13 Years Out of Date)
 ```
 COMPLETION CRITERIA:
 - [ ] Lists all class types
@@ -142,7 +179,8 @@ COMPLETION CRITERIA:
 - [ ] CRUD operations same pattern
 ```
 
-#### Task 3.5: AdminSessions CRUD
+#### Task 3.5: AdminSessions CRUD - [OPT-105](https://linear.app/overphlowtank/issue/OPT-105)
+**Enables:** [OPT-80](https://linear.app/overphlowtank/issue/OPT-80) (Class Schedule Display)
 ```
 COMPLETION CRITERIA:
 - [ ] Lists all sessions with location and day/time
@@ -153,11 +191,12 @@ COMPLETION CRITERIA:
 - [ ] Inline status toggle for quick updates
 ```
 
-#### Task 3.6: AdminPages Content Editor
+#### Task 3.6: AdminPages Content Editor - [OPT-106](https://linear.app/overphlowtank/issue/OPT-106)
+**Enables:** [OPT-92](https://linear.app/overphlowtank/issue/OPT-92) (Terms & Conditions)
 ```
 COMPLETION CRITERIA:
 - [ ] Lists all page content slugs
-- [ ] Pre-seed slugs: our-story, refund-policy, our-classes
+- [ ] Pre-seed slugs: our-story, refund-policy, our-classes, terms-conditions
 - [ ] Rich text or markdown editor for content field
 - [ ] Form fields: slug (readonly after create), title, content
 - [ ] Preview button to see formatted output
@@ -168,7 +207,8 @@ COMPLETION CRITERIA:
 
 ### Phase 4: Public Pages Polish (Ralph-Ready)
 
-#### Task 4.1: Teachers Page Data Integration
+#### Task 4.1: Teachers Page Data Integration - [OPT-107](https://linear.app/overphlowtank/issue/OPT-107)
+**Completes:** [OPT-91](https://linear.app/overphlowtank/issue/OPT-91) (Instructors/About Page)
 ```
 COMPLETION CRITERIA:
 - [ ] Fetches from /api/teachers
@@ -179,7 +219,8 @@ COMPLETION CRITERIA:
 - [ ] Responsive grid layout
 ```
 
-#### Task 4.2: Classes/Schedule Page
+#### Task 4.2: Classes/Schedule Page - [OPT-108](https://linear.app/overphlowtank/issue/OPT-108)
+**Completes:** [OPT-80](https://linear.app/overphlowtank/issue/OPT-80) (Class Schedule Display)
 ```
 COMPLETION CRITERIA:
 - [ ] Fetches sessions from /api/sessions
@@ -191,7 +232,8 @@ COMPLETION CRITERIA:
 - [ ] Status badges (Open = green, Full = red, etc.)
 ```
 
-#### Task 4.3: Locations Page with Map
+#### Task 4.3: Locations Page with Map - [OPT-109](https://linear.app/overphlowtank/issue/OPT-109)
+**Completes:** [OPT-82](https://linear.app/overphlowtank/issue/OPT-82) (Location Management)
 ```
 COMPLETION CRITERIA:
 - [ ] Fetches from /api/locations
@@ -202,7 +244,7 @@ COMPLETION CRITERIA:
 - [ ] Responsive design
 ```
 
-#### Task 4.4: About/Our Story Page
+#### Task 4.4: About/Our Story Page - [OPT-110](https://linear.app/overphlowtank/issue/OPT-110)
 ```
 COMPLETION CRITERIA:
 - [ ] Route: /about or /our-story
@@ -214,9 +256,47 @@ COMPLETION CRITERIA:
 
 ---
 
+### Additional Features (Ralph-Ready)
+
+#### Contact Page & Form - [OPT-111](https://linear.app/overphlowtank/issue/OPT-111)
+**Implements:** [OPT-85](https://linear.app/overphlowtank/issue/OPT-85) (Contact Page - Broken)
+```
+COMPLETION CRITERIA:
+- [ ] Route: /contact
+- [ ] Contact form (name, email, phone, message, inquiry type)
+- [ ] Form validation with zod
+- [ ] Submit sends email or stores in DB
+- [ ] Hank's contact info displayed (720-515-8275)
+- [ ] Navigation link in Navbar
+```
+
+#### Photo Gallery - [OPT-112](https://linear.app/overphlowtank/issue/OPT-112)
+**Implements:** [OPT-83](https://linear.app/overphlowtank/issue/OPT-83) (Photo Gallery - Cannot Access)
+```
+COMPLETION CRITERIA:
+- [ ] Route: /gallery
+- [ ] Grid layout with lightbox on click
+- [ ] Categories/albums (Classes, Parties, Events)
+- [ ] Lazy loading for performance
+- [ ] Admin page for uploading/managing photos
+```
+
+#### MailChimp Newsletter Signup - [OPT-113](https://linear.app/overphlowtank/issue/OPT-113)
+**Implements:** [OPT-86](https://linear.app/overphlowtank/issue/OPT-86) (Newsletter Signup)
+```
+COMPLETION CRITERIA:
+- [ ] Newsletter signup form in footer
+- [ ] Connects to MailChimp API or uses embed form
+- [ ] Success/error messaging
+- [ ] Double opt-in flow
+```
+
+---
+
 ### Phase 5: Registration Flow (Partial Ralph - HITL for Stripe)
 
-#### Task 5.1: Registration Form UI
+#### Task 5.1: Registration Form UI - [OPT-114](https://linear.app/overphlowtank/issue/OPT-114)
+**Related to:** [OPT-79](https://linear.app/overphlowtank/issue/OPT-79) (Registration & Enrollment Flow)
 ```
 COMPLETION CRITERIA:
 - [ ] Modal or page for registration
@@ -227,7 +307,7 @@ COMPLETION CRITERIA:
 - [ ] Submit creates registration with status=Pending
 ```
 
-#### Task 5.2: Stripe Checkout Integration (HITL Heavy)
+#### Task 5.2: Stripe Checkout Integration (HITL Heavy) - [OPT-115](https://linear.app/overphlowtank/issue/OPT-115)
 ```
 COMPLETION CRITERIA:
 - [ ] Stripe publishable key in env
@@ -242,10 +322,10 @@ COMPLETION CRITERIA:
 
 ### Phase 6: Content Migration (Manual + Ralph)
 
-#### Task 6.1: Import Current Site Content
+#### Task 6.1: Import Current Site Content - [OPT-116](https://linear.app/overphlowtank/issue/OPT-116)
 ```
 COMPLETION CRITERIA:
-- [ ] All 3 current locations imported
+- [ ] All 3 current locations imported (only 2 still operating)
 - [ ] Both teacher bios imported (Hank, Brian)
 - [ ] 5+ real testimonials imported
 - [ ] Our Story content imported
@@ -261,6 +341,8 @@ Use this format for each Ralph task:
 
 ```markdown
 # Task: [TASK NAME]
+
+**Linear:** [OPT-XXX](https://linear.app/overphlowtank/issue/OPT-XXX)
 
 ## Context
 You are building the Rocky Mountain Aardvarks website. This is a React + Hono + Cloudflare D1 project.
@@ -347,12 +429,12 @@ Create `progress.txt` in project root:
 
 ## Phase 1: Local Dev
 
-### Task 1.1: Wrangler Setup
+### Task 1.1: Wrangler Setup (OPT-97)
 - 2026-01-14 22:00 - Started task
 - 2026-01-14 22:15 - wrangler.toml configured
 - 2026-01-14 22:30 - COMPLETE: Local D1 working
 
-### Task 1.2: Seed Data
+### Task 1.2: Seed Data (OPT-98)
 - ...
 ```
 
@@ -380,4 +462,4 @@ pnpm build                  # Production build
 
 ---
 
-*Ralph PRD ready. Start with Phase 1, Task 1.1.*
+*Ralph PRD ready. Start with Phase 1, Task 1.1 ([OPT-97](https://linear.app/overphlowtank/issue/OPT-97)).*
