@@ -78,6 +78,16 @@ export const events = sqliteTable("events", {
     imageUrl: text("image_url"),
 });
 
+export const contactSubmissions = sqliteTable("contact_submissions", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    inquiryType: text("inquiry_type").notNull(),
+    message: text("message").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
 export const insertClassSchema = createInsertSchema(classes);
 export const insertLocationSchema = createInsertSchema(locations);
 export const insertSessionSchema = createInsertSchema(sessions);
@@ -86,6 +96,7 @@ export const insertTeacherSchema = createInsertSchema(teachers);
 export const insertTestimonialSchema = createInsertSchema(testimonials);
 export const insertPageContentSchema = createInsertSchema(pageContent);
 export const insertEventSchema = createInsertSchema(events);
+export const insertContactSchema = createInsertSchema(contactSubmissions);
 
 export type Class = typeof classes.$inferSelect;
 export type InsertClass = z.infer<typeof insertClassSchema>;
@@ -99,3 +110,4 @@ export type Teacher = typeof teachers.$inferSelect;
 export type Testimonial = typeof testimonials.$inferSelect;
 export type PageContent = typeof pageContent.$inferSelect;
 export type Event = typeof events.$inferSelect;
+export type ContactSubmission = typeof contactSubmissions.$inferSelect;

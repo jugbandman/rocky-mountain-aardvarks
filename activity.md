@@ -2,10 +2,33 @@
 
 ## Current Status
 - Last updated: 2026-01-21
-- Tasks completed: 16/22
-- Current task: Task 4.4 Complete, Next: Task 5.1
+- Tasks completed: 17/22
+- Current task: Task 5.1 Complete, Next: Task 5.2
 
 ## Session Log
+
+### 2026-01-21 - Task 5.1 Complete
+- Task 5.1: Contact page with form (OPT-111)
+- Created /contact route in App.tsx
+- Created Contact.tsx page component with two-column layout
+- Left column: Contact info (phone, email, locations link) with Hank's number (720-515-8275)
+- Right column: Contact form with fields:
+  - Name (required)
+  - Email (required, validated)
+  - Phone (optional)
+  - Inquiry Type (dropdown: General, Classes, Parties, Registration, Other)
+  - Message (required, min 10 chars)
+- Form validation with zod schema
+- Loading state during submission with spinner
+- Success state with checkmark animation
+- Error handling for failed submissions
+- Added contact_submissions table to schema
+- Created POST /api/contact endpoint to store submissions
+- Added database migration for contact_submissions table
+- Added "Contact" link to Navbar (replaced Parties)
+- Responsive design matching other pages
+- TypeScript check passes
+- Next: Task 5.2 - Photo gallery page
 
 ### 2026-01-21 - Task 4.4 Complete
 - Task 4.4: About/Our Story page (OPT-110)

@@ -506,4 +506,13 @@ app.post("/registrations", async (c) => {
     return c.json(result, 201);
 });
 
+// Contact API (stores contact form submissions)
+app.post("/contact", async (c) => {
+    const db = getDb(c.env.DB);
+    const body = await c.req.json();
+    const validated = schema.insertContactSchema.parse(body);
+    const result = await db.insert(schema.contactSubmissions).values(validated).returning().get();
+    return c.json(result, 201);
+});
+
 export const onRequest = handle(app);

@@ -15,7 +15,7 @@ export default function Navbar() {
     { name: "Teachers", path: "/teachers" },
     { name: "Testimonials", path: "/testimonials" },
     { name: "Locations", path: "/locations" },
-    { name: "Parties", path: "/parties" },
+    { name: "Contact", path: "/contact" },
   ];
 
   const isActive = (path: string) => location === path;

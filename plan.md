@@ -178,7 +178,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Display Hank's contact info (720-515-8275)",
     "Add navigation link in Navbar"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 
