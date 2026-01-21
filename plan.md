@@ -230,7 +230,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Form validation with zod",
     "Submit creates registration with status=Pending"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 

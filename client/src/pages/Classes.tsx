@@ -7,6 +7,7 @@ import type { Class, Location } from "@shared/schema";
 import { format, isWithinInterval } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import RegistrationDialog from "@/components/RegistrationDialog";
 
 interface SessionWithRelations {
     id: number;
@@ -63,6 +64,13 @@ export default function Classes() {
     const { data: classes, loading: classesLoading, error: classesError } = useApi<Class[]>("/classes");
     const { data: locations } = useApi<Location[]>("/locations");
     const [selectedLocation, setSelectedLocation] = useState<string>("all");
+    const [registrationDialogOpen, setRegistrationDialogOpen] = useState(false);
+    const [selectedSession, setSelectedSession] = useState<SessionWithRelations | null>(null);
+
+    const handleRegisterClick = (session: SessionWithRelations) => {
+        setSelectedSession(session);
+        setRegistrationDialogOpen(true);
+    };
 
     const loading = sessionsLoading || classesLoading;
     const error = sessionsError || classesError;
@@ -356,7 +364,7 @@ export default function Classes() {
                                                                                         {session.status}
                                                                                     </span>
                                                                                     <Button
-                                                                                        disabled={session.status === "Full"}
+                                                                                        onClick={() => handleRegisterClick(session)}
                                                                                         className="rounded-full font-black px-8"
                                                                                     >
                                                                                         {session.status === "Full"
@@ -387,6 +395,12 @@ export default function Classes() {
             </div>
             </main>
             <Footer />
+
+            <RegistrationDialog
+                session={selectedSession}
+                open={registrationDialogOpen}
+                onOpenChange={setRegistrationDialogOpen}
+            />
         </div>
     );
 }

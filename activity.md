@@ -2,10 +2,28 @@
 
 ## Current Status
 - Last updated: 2026-01-21
-- Tasks completed: 19/22
-- Current task: Task 5.3 Complete, Next: Task 6.1 (Registration form UI)
+- Tasks completed: 20/22
+- Current task: Task 6.1 Complete, Next: Task 6.2 (Stripe checkout integration)
 
 ## Session Log
+
+### 2026-01-21 - Task 6.1 Complete
+- Task 6.1: Registration form UI (OPT-114)
+- Created RegistrationDialog component with:
+  - Session info card showing class, day/time, location, and date range
+  - Form fields: parentName (required), parentEmail (required, validated), studentName (required), studentAge (required, 0-10)
+  - Form validation with zod schema and react-hook-form
+  - Terms and conditions checkbox (required)
+  - Loading state with spinner during submission
+  - Success state with checkmark animation and confirmation message
+  - Error state for failed submissions
+- Integrated with Classes page:
+  - Added state for dialog and selected session
+  - Register/Join Waitlist buttons now open registration dialog
+  - Dialog pre-filled with session info
+- POST to /api/registrations creates registration with status=Pending
+- TypeScript check passes
+- Next: Task 6.2 - Stripe checkout integration (OPT-115)
 
 ### 2026-01-21 - Task 5.3 Complete
 - Task 5.3: MailChimp newsletter signup (OPT-113)
