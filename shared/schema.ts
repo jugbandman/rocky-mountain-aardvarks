@@ -99,6 +99,12 @@ export const photos = sqliteTable("photos", {
     createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
+export const newsletterSubscribers = sqliteTable("newsletter_subscribers", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    email: text("email").unique().notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
 export const insertClassSchema = createInsertSchema(classes);
 export const insertLocationSchema = createInsertSchema(locations);
 export const insertSessionSchema = createInsertSchema(sessions);
@@ -109,6 +115,7 @@ export const insertPageContentSchema = createInsertSchema(pageContent);
 export const insertEventSchema = createInsertSchema(events);
 export const insertContactSchema = createInsertSchema(contactSubmissions);
 export const insertPhotoSchema = createInsertSchema(photos);
+export const insertNewsletterSubscriberSchema = createInsertSchema(newsletterSubscribers);
 
 export type Class = typeof classes.$inferSelect;
 export type InsertClass = z.infer<typeof insertClassSchema>;
@@ -125,3 +132,5 @@ export type Event = typeof events.$inferSelect;
 export type ContactSubmission = typeof contactSubmissions.$inferSelect;
 export type Photo = typeof photos.$inferSelect;
 export type InsertPhoto = z.infer<typeof insertPhotoSchema>;
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type InsertNewsletterSubscriber = z.infer<typeof insertNewsletterSubscriberSchema>;

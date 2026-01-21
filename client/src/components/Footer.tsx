@@ -1,8 +1,46 @@
+import { useState } from "react";
 import { Link } from "wouter";
-import { Facebook, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone, CheckCircle, Loader2 } from "lucide-react";
 import AngledDivider from "@/components/AngledDivider";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleNewsletterSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setEmail("");
+      } else {
+        const data = await response.json() as { error?: string; alreadySubscribed?: boolean };
+        if (data.alreadySubscribed) {
+          setError("You're already subscribed!");
+        } else {
+          setError(data.error || "Something went wrong. Please try again.");
+        }
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <footer className="bg-primary text-white pt-16 pb-8 mt-auto relative">
       <AngledDivider position="top" color="text-white" />
@@ -80,6 +118,48 @@ export default function Footer() {
                 <a href="tel:7205158275" className="hover:text-white transition-colors">720-515-VARK (8275)</a>
               </li>
             </ul>
+
+            {/* Newsletter Signup */}
+            <div className="mt-8">
+              <h4 className="font-heading font-bold text-lg mb-3 text-secondary">Newsletter</h4>
+              <p className="text-blue-100 text-sm mb-4">
+                Stay updated on classes, events, and special offers!
+              </p>
+              {isSuccess ? (
+                <div className="flex items-center gap-2 text-green-300">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="text-sm">Thanks for subscribing!</span>
+                </div>
+              ) : (
+                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="bg-white/10 border-white/20 text-white placeholder:text-blue-200 focus:border-secondary"
+                  />
+                  {error && (
+                    <p className="text-red-300 text-sm">{error}</p>
+                  )}
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full bg-secondary hover:bg-secondary/90 text-primary font-semibold"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Subscribing...
+                      </>
+                    ) : (
+                      "Subscribe"
+                    )}
+                  </Button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
 

@@ -210,7 +210,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Connect to MailChimp (embed form or API)",
     "Success/error messaging"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 

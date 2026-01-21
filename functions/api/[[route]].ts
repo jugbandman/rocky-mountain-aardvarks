@@ -515,6 +515,25 @@ app.post("/contact", async (c) => {
     return c.json(result, 201);
 });
 
+// Newsletter subscription API
+app.post("/newsletter", async (c) => {
+    const db = getDb(c.env.DB);
+    const body = await c.req.json<{ email: string }>();
+
+    if (!body.email || !body.email.includes("@")) {
+        return c.json({ error: "Valid email is required" }, 400);
+    }
+
+    // Check if already subscribed
+    const existing = await db.select().from(schema.newsletterSubscribers).where(eq(schema.newsletterSubscribers.email, body.email)).get();
+    if (existing) {
+        return c.json({ error: "Email already subscribed", alreadySubscribed: true }, 409);
+    }
+
+    const result = await db.insert(schema.newsletterSubscribers).values({ email: body.email }).returning().get();
+    return c.json(result, 201);
+});
+
 // Photos API (public - only active photos)
 app.get("/photos", async (c) => {
     const db = getDb(c.env.DB);

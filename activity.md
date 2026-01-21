@@ -2,10 +2,28 @@
 
 ## Current Status
 - Last updated: 2026-01-21
-- Tasks completed: 18/22
-- Current task: Task 5.2 Complete, Next: Task 5.3
+- Tasks completed: 19/22
+- Current task: Task 5.3 Complete, Next: Task 6.1 (Registration form UI)
 
 ## Session Log
+
+### 2026-01-21 - Task 5.3 Complete
+- Task 5.3: MailChimp newsletter signup (OPT-113)
+- Added newsletter_subscribers table to schema with fields: id, email (unique), createdAt
+- Added insertNewsletterSubscriberSchema and NewsletterSubscriber types to schema exports
+- Created database migration file 0003_newsletter_subscribers.sql
+- Added POST /api/newsletter endpoint with:
+  - Email validation
+  - Duplicate email detection (returns 409 with alreadySubscribed flag)
+  - Success returns 201 with subscriber data
+- Updated Footer.tsx component with newsletter signup form:
+  - Email input with styled appearance matching footer theme
+  - Submit button with loading state (spinner)
+  - Success state with checkmark icon and "Thanks for subscribing!" message
+  - Error state for duplicate emails or failed submissions
+  - Form integrated into Contact Us column
+- TypeScript check passes
+- Next: Task 6.1 - Registration form UI (OPT-114)
 
 ### 2026-01-21 - Task 5.2 Complete
 - Task 5.2: Photo gallery page (OPT-112)
