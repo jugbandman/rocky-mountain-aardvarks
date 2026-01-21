@@ -195,7 +195,7 @@ JSON-formatted task list. Agent modifies ONLY `passes` field.
     "Lazy loading for performance",
     "Add navigation link in Navbar"
   ],
-  "passes": false
+  "passes": true
 }
 ```
 

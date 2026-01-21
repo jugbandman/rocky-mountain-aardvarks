@@ -2,10 +2,31 @@
 
 ## Current Status
 - Last updated: 2026-01-21
-- Tasks completed: 17/22
-- Current task: Task 5.1 Complete, Next: Task 5.2
+- Tasks completed: 18/22
+- Current task: Task 5.2 Complete, Next: Task 5.3
 
 ## Session Log
+
+### 2026-01-21 - Task 5.2 Complete
+- Task 5.2: Photo gallery page (OPT-112)
+- Created photos table in schema with fields: id, title, imageUrl, category, description, displayOrder, active, createdAt
+- Added insertPhotoSchema and Photo/InsertPhoto types to schema exports
+- Created database migration file 0002_photos.sql
+- Added public GET /api/photos endpoint (returns only active photos)
+- Added admin CRUD endpoints: GET/POST/PUT/DELETE /api/admin/photos
+- Created Gallery.tsx page component with:
+  - Category filter tabs (All, Classes, Parties, Events)
+  - Responsive grid layout (1-4 columns based on screen size)
+  - Lazy loading via native loading="lazy" attribute
+  - Lightbox dialog with keyboard navigation (arrow keys)
+  - Previous/Next navigation buttons in lightbox
+  - Photo counter and caption display
+  - Empty state when no photos in category
+  - Loading and error states
+- Added /gallery route to App.tsx
+- Added "Gallery" link to Navbar (between Teachers and Testimonials)
+- TypeScript check passes
+- Next: Task 5.3 - MailChimp newsletter signup
 
 ### 2026-01-21 - Task 5.1 Complete
 - Task 5.1: Contact page with form (OPT-111)

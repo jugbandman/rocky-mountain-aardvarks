@@ -515,4 +515,42 @@ app.post("/contact", async (c) => {
     return c.json(result, 201);
 });
 
+// Photos API (public - only active photos)
+app.get("/photos", async (c) => {
+    const db = getDb(c.env.DB);
+    const result = await db.select().from(schema.photos).where(eq(schema.photos.active, true)).all();
+    return c.json(result);
+});
+
+// Admin Photos CRUD
+app.get("/admin/photos", async (c) => {
+    const db = getDb(c.env.DB);
+    const result = await db.select().from(schema.photos).all();
+    return c.json(result);
+});
+
+app.post("/admin/photos", async (c) => {
+    const db = getDb(c.env.DB);
+    const body = await c.req.json();
+    const validated = schema.insertPhotoSchema.parse(body);
+    const result = await db.insert(schema.photos).values(validated).returning().get();
+    return c.json(result, 201);
+});
+
+app.put("/admin/photos/:id", async (c) => {
+    const id = parseInt(c.req.param("id"));
+    const db = getDb(c.env.DB);
+    const body = await c.req.json();
+    const validated = schema.insertPhotoSchema.parse(body);
+    const result = await db.update(schema.photos).set(validated).where(eq(schema.photos.id, id)).returning().get();
+    return c.json(result);
+});
+
+app.delete("/admin/photos/:id", async (c) => {
+    const id = parseInt(c.req.param("id"));
+    const db = getDb(c.env.DB);
+    await db.delete(schema.photos).where(eq(schema.photos.id, id)).run();
+    return c.json({ success: true });
+});
+
 export const onRequest = handle(app);
