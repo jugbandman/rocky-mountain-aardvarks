@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import { MAINSTREET_BOOKING_URL } from "@/lib/constants";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -57,9 +58,11 @@ export default function Navbar() {
               </a>
             </Link>
           ))}
-          <Button className="bg-accent hover:bg-accent/90 text-white font-bold rounded-full px-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5">
-            Register Now
-          </Button>
+          <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
+            <Button className="bg-accent hover:bg-accent/90 text-white font-bold rounded-full px-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5">
+              Book a Class
+            </Button>
+          </a>
         </div>
 
         {/* Mobile Navigation */}
@@ -93,9 +96,11 @@ export default function Navbar() {
                   ))}
                 </div>
 
-                <Button className="w-full bg-accent hover:bg-accent/90 text-white font-bold rounded-full py-6 text-lg shadow-md mt-4">
-                  Register Now
-                </Button>
+                <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="w-full">
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-white font-bold rounded-full py-6 text-lg shadow-md mt-4">
+                    Book a Class
+                  </Button>
+                </a>
               </div>
             </SheetContent>
           </Sheet>

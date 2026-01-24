@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "wouter";
-import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle, Loader2 } from "lucide-react";
+import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle, Loader2, ExternalLink } from "lucide-react";
 import AngledDivider from "@/components/AngledDivider";
 import { useApi } from "@/hooks/useApi";
 import type { Session, Testimonial } from "@shared/schema";
+import { MAINSTREET_BOOKING_URL } from "@/lib/constants";
 
 export default function Home() {
   const { data: testimonials, loading: testimonialsLoading } = useApi<Testimonial[]>("/testimonials");
@@ -17,7 +18,7 @@ export default function Home() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative bg-primary overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
+        <section className="relative bg-primary overflow-hidden pt-20 pb-40 md:pt-32 md:pb-56">
           {/* Abstract Background Elements */}
           <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
             <div className="absolute top-10 left-10 w-64 h-64 bg-secondary/10 rounded-full blur-3xl animate-pulse"></div>
@@ -29,9 +30,13 @@ export default function Home() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
               <div className="flex-1 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-secondary font-bold text-sm mb-6 border border-white/10">
-                  <Star className="w-4 h-4 fill-secondary" />
-                  <span>Voted Family Favorite 2024</span>
+                {/* Large Logo */}
+                <div className="mb-8 flex justify-center md:justify-start">
+                  <img
+                    src="/images/branding/logo-full.png"
+                    alt="Rocky Mountain Aardvarks"
+                    className="w-48 md:w-64 h-auto drop-shadow-2xl"
+                  />
                 </div>
                 <h1 className="text-5xl md:text-7xl font-heading font-black text-white leading-tight mb-6 tracking-tight">
                   Kids Music That <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-200">ROCKS!</span>
@@ -40,15 +45,16 @@ export default function Home() {
                   Original, funky, and fun music classes for babies, toddlers, and preschoolers in Denver & Boulder. Join the band today!
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                  <Link href="/classes">
+                  <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-accent hover:bg-accent/90 text-white font-bold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
-                      Find a Class
+                      Book a Class <ExternalLink className="ml-2 w-4 h-4" />
+                    </Button>
+                  </a>
+                  <Link href="/classes">
+                    <Button variant="outline" className="border-2 border-white/20 text-white hover:bg-white/10 font-bold text-lg px-8 py-6 rounded-full backdrop-blur-sm">
+                      View Schedule
                     </Button>
                   </Link>
-                  <Button variant="outline" className="border-2 border-white/20 text-white hover:bg-white/10 font-bold text-lg px-8 py-6 rounded-full backdrop-blur-sm">
-                    <PlayCircle className="mr-2 w-5 h-5" />
-                    Watch Video
-                  </Button>
                 </div>
               </div>
 
@@ -86,8 +92,26 @@ export default function Home() {
           <AngledDivider position="bottom" color="text-white" />
         </section>
 
+        {/* Award Badges - Positioned on the divider line */}
+        <div className="relative z-30 flex justify-center gap-6 md:gap-10 -mt-20 md:-mt-24 mb-8">
+          <div className="w-28 h-28 md:w-40 md:h-40 bg-white rounded-full shadow-2xl p-2 flex items-center justify-center hover:scale-105 transition-transform">
+            <img
+              src="/images/branding/award-2024-winner.png"
+              alt="Family Favorite 2024 Winner"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="w-28 h-28 md:w-40 md:h-40 bg-white rounded-full shadow-2xl p-2 flex items-center justify-center hover:scale-105 transition-transform">
+            <img
+              src="/images/branding/award-runner-up.png"
+              alt="Family Favorite Runner Up"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+
         {/* Features Section */}
-        <section className="py-24 bg-white">
+        <section className="pt-8 pb-24 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <h2 className="text-4xl font-heading font-bold text-primary mb-4">Not Your Average Music Class</h2>
@@ -188,11 +212,11 @@ export default function Home() {
                       <Star className="w-4 h-4" />
                       <span>with {cls.instructor}</span>
                     </div>
-                    <Link href="/classes">
+                    <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
                       <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-xl mt-4">
-                        Register
+                        Register <ExternalLink className="ml-2 w-3 h-3" />
                       </Button>
-                    </Link>
+                    </a>
                   </div>
                 ))}
               </div>
@@ -237,12 +261,16 @@ export default function Home() {
               Join the coolest music class in town. Spaces fill up fast, so grab your spot today!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-accent hover:bg-accent/90 text-white font-bold text-xl px-10 py-8 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all">
-                Register Now
-              </Button>
-              <Button variant="outline" className="border-2 border-primary text-primary hover:bg-primary/5 font-bold text-xl px-10 py-8 rounded-full">
-                Contact Us
-              </Button>
+              <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                <Button className="bg-accent hover:bg-accent/90 text-white font-bold text-xl px-10 py-8 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all">
+                  Book a Class <ExternalLink className="ml-2 w-5 h-5" />
+                </Button>
+              </a>
+              <Link href="/contact">
+                <Button variant="outline" className="border-2 border-primary text-primary hover:bg-primary/5 font-bold text-xl px-10 py-8 rounded-full">
+                  Contact Us
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
