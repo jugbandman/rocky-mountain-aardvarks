@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Music, Users, Clock, Gift, PartyPopper, Star, Phone, Mail } from "lucide-react";
+import { Music, Users, Clock, Gift, PartyPopper, Star, Phone, Mail, Loader2 } from "lucide-react";
 import { Link } from "wouter";
+import { useApi } from "@/hooks/useApi";
+import type { Testimonial } from "@shared/schema";
 
 const partyFeatures = [
     {
@@ -36,22 +38,11 @@ const partyHighlights = [
     "Memorable experience that adults enjoy too",
 ];
 
-const testimonials = [
-    {
-        quote: "Not only did my son have such a great time, but all of the kids ages 4 months to 6 years old had a great time jamming out! The highlight was seeing children in music bliss and adults learning how to be childlike again.",
-        author: "Birthday Party Parent",
-    },
-    {
-        quote: "After seeing how much Wyatt enjoys his weekly music class, we decided to book Rocky Mountain Aardvarks for his 2nd birthday party. It gave the parents an opportunity to relax and enjoy the moments while all of the kids could rock out together.",
-        author: "Wyatt's Mom",
-    },
-    {
-        quote: "If I could give 10 stars I would! The music, team and atmosphere they provided was top notch!",
-        author: "Nicole R.",
-    },
-];
-
 export default function Parties() {
+    const { data: testimonials, loading: testimonialsLoading } = useApi<Testimonial[]>("/testimonials?category=party");
+
+    const activeTestimonials = testimonials?.filter(t => t.active) || [];
+
     return (
         <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
@@ -154,21 +145,29 @@ export default function Parties() {
                     <h2 className="text-3xl font-heading font-bold text-center text-primary mb-12">
                         Party Reviews
                     </h2>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {testimonials.map((testimonial, index) => (
-                            <Card key={index} className="border-0 shadow-lg">
-                                <CardContent className="p-6">
-                                    <div className="flex gap-1 mb-4">
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star key={i} className="w-4 h-4 fill-secondary text-secondary" />
-                                        ))}
-                                    </div>
-                                    <p className="text-gray-600 italic mb-4">"{testimonial.quote}"</p>
-                                    <p className="font-bold text-primary text-sm">- {testimonial.author}</p>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+                    {testimonialsLoading ? (
+                        <div className="flex justify-center py-8">
+                            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                        </div>
+                    ) : activeTestimonials.length > 0 ? (
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {activeTestimonials.slice(0, 3).map((testimonial) => (
+                                <Card key={testimonial.id} className="border-0 shadow-lg">
+                                    <CardContent className="p-6">
+                                        <div className="flex gap-1 mb-4">
+                                            {[...Array(testimonial.stars || 5)].map((_, i) => (
+                                                <Star key={i} className="w-4 h-4 fill-secondary text-secondary" />
+                                            ))}
+                                        </div>
+                                        <p className="text-gray-600 italic mb-4">"{testimonial.quote}"</p>
+                                        <p className="font-bold text-primary text-sm">- {testimonial.author}</p>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-center text-gray-500">No party reviews yet.</p>
+                    )}
                 </section>
 
                 {/* CTA Section */}

@@ -57,6 +57,7 @@ export const testimonials = sqliteTable("testimonials", {
     quote: text("quote").notNull(),
     author: text("author").notNull(),
     source: text("source"), // e.g. "Google", "Yelp"
+    category: text("category").default("class"), // "class" or "party"
     stars: integer("stars").default(5),
     active: integer("active", { mode: "boolean" }).default(true),
 });

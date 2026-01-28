@@ -51,18 +51,12 @@ INSERT INTO locations (name, address, lat, lng) VALUES
 -- TESTIMONIALS (from real parent reviews)
 -- =============================================================================
 
-INSERT INTO testimonials (quote, author, source, stars, active) VALUES
-  (
-    'After seeing how much Wyatt enjoys his weekly music class, we decided to book Rocky Mountain Aardvarks for Wyatt''s 2nd birthday party. Classes have been incredibly engaging, and he has progressed into a dance party/guitar strumming machine at home. The party gave the parents an opportunity to relax and enjoy the moments while all of the kids could rock out together.',
-    'Wyatt''s Mom',
-    'Google',
-    5,
-    1
-  ),
+INSERT INTO testimonials (quote, author, source, category, stars, active) VALUES
   (
     'Sawyer enjoys the class so much that he looks forward to it each week, picks out special outfits for it, and it''s the one class they take that he really notices if they miss. It''s also fun for parents. If parents were looking for just one class for their family, this should be it. RMA incorporates music, movement, and imaginary play in a fun-loving environment.',
     'Maegan, Sawyer''s Mom',
     'Google',
+    'class',
     5,
     1
   ),
@@ -70,6 +64,7 @@ INSERT INTO testimonials (quote, author, source, stars, active) VALUES
     'Music for Aardvarks is not your average kids'' music class: fully engaging, fun, and the music is great! There is never a dull moment, with singing, dancing, and instruments.',
     'Rebecca, Mom of Reuben and Ari',
     'Google',
+    'class',
     5,
     1
   ),
@@ -77,6 +72,15 @@ INSERT INTO testimonials (quote, author, source, stars, active) VALUES
     'Rocky Mountain Aardvarks is the best music program for families. We have tried all of the Denver area programs and it''s hands down the most engaging, fun, and entertaining activity to do with the family. The songs grab the interests of our infant, toddler, and both adults.',
     'Ricki, Mom of Cooper and Benjamin',
     'Yelp',
+    'class',
+    5,
+    1
+  ),
+  (
+    'After seeing how much Wyatt enjoys his weekly music class, we decided to book Rocky Mountain Aardvarks for Wyatt''s 2nd birthday party. The party gave the parents an opportunity to relax and enjoy the moments while all of the kids could rock out together.',
+    'Wyatt''s Mom',
+    'Google',
+    'party',
     5,
     1
   ),
@@ -84,6 +88,7 @@ INSERT INTO testimonials (quote, author, source, stars, active) VALUES
     'If I could give 10 stars I would! The music, team and atmosphere they provided was top notch!',
     'Nicole R.',
     'GigSalad',
+    'party',
     5,
     1
   ),
@@ -91,6 +96,7 @@ INSERT INTO testimonials (quote, author, source, stars, active) VALUES
     'Hank was amazing with the kids (ages 2-5), provided fun instruments for them to join in, and got them running around.',
     'Cassandra B.',
     'GigSalad',
+    'party',
     5,
     1
   ),
@@ -98,6 +104,7 @@ INSERT INTO testimonials (quote, author, source, stars, active) VALUES
     'Not only did my son have such a great time, but all of the kids ages 4 months to 6 years old had a great time jamming out! The highlight was seeing children in music bliss and adults learning how to be childlike again. Every adult commented how much they loved having permission to be a child again.',
     'Birthday Party Parent',
     'Google',
+    'party',
     5,
     1
   );

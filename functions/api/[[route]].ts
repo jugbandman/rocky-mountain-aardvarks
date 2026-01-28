@@ -335,6 +335,15 @@ app.delete("/locations/:id", async (c) => {
 // Testimonials API
 app.get("/testimonials", async (c) => {
     const db = getDb(c.env.DB);
+    const category = c.req.query("category");
+
+    if (category) {
+        const result = await db.select().from(schema.testimonials)
+            .where(eq(schema.testimonials.category, category))
+            .all();
+        return c.json(result);
+    }
+
     const result = await db.select().from(schema.testimonials).all();
     return c.json(result);
 });
