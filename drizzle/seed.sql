@@ -21,13 +21,6 @@ INSERT INTO teachers (name, bio, image_url, active, display_order) VALUES
     '/images/teachers/hank.jpg',
     1,
     1
-  ),
-  (
-    'Brian Hartman',
-    'Brian first joined Rocky Mountain Aardvarks in 2012, starting by accompanying classes on guitar. A multi-talented creative, Brian is also a freelance photographer and writer. When he''s not making music with families, you''ll find him hiking in the mountains or planning his next road trip. He can''t wait to play and sing with you all very soon!',
-    '/images/teachers/brian.jpg',
-    1,
-    2
   );
 
 -- =============================================================================
