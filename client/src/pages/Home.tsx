@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "wouter";
-import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle, Loader2, ExternalLink } from "lucide-react";
+import { Music, Star, Calendar, MapPin, ArrowRight, PlayCircle, Loader2, ExternalLink, Quote } from "lucide-react";
 import AngledDivider from "@/components/AngledDivider";
 import { useApi } from "@/hooks/useApi";
 import type { Session, Testimonial } from "@shared/schema";
@@ -11,6 +11,11 @@ import { MAINSTREET_BOOKING_URL } from "@/lib/constants";
 export default function Home() {
   const { data: testimonials, loading: testimonialsLoading } = useApi<Testimonial[]>("/testimonials");
   const { data: sessions, loading: sessionsLoading } = useApi<Session[]>("/sessions");
+
+  // Get featured testimonials first, then fill with others
+  const featuredTestimonials = testimonials?.filter(t => t.active && t.featured) || [];
+  const regularTestimonials = testimonials?.filter(t => t.active && !t.featured) || [];
+  const displayTestimonials = [...featuredTestimonials, ...regularTestimonials].slice(0, 3);
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans">
@@ -227,8 +232,11 @@ export default function Home() {
         {/* Testimonials */}
         <section className="py-24 bg-primary text-white relative">
           <AngledDivider position="top" color="text-brand-light" />
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-heading font-bold mb-16">Don't Take Our Word For It</h2>
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <p className="text-secondary font-bold uppercase tracking-widest mb-4">What Families Say</p>
+              <h2 className="text-4xl md:text-5xl font-heading font-bold">Don't Take Our Word For It</h2>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {testimonialsLoading ? (
@@ -236,18 +244,32 @@ export default function Home() {
                   <Loader2 className="w-8 h-8 animate-spin text-secondary" />
                 </div>
               ) : (
-                testimonials?.slice(0, 3).map((t, i) => (
-                  <div key={i} className={`bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/10 ${i === 1 ? 'transform md:-translate-y-4' : ''}`}>
-                    <div className="flex justify-center mb-6">
-                      {[...Array(t.stars || 5)].map((_, i) => <Star key={i} className="w-5 h-5 text-secondary fill-secondary" />)}
+                displayTestimonials.map((t, i) => (
+                  <div key={t.id} className={`bg-white/10 backdrop-blur-sm p-8 rounded-3xl border border-white/10 hover:bg-white/15 transition-colors ${i === 1 ? 'transform md:-translate-y-4' : ''}`}>
+                    <Quote className="w-10 h-10 text-secondary/50 mb-4" />
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(t.stars || 5)].map((_, j) => <Star key={j} className="w-4 h-4 text-secondary fill-secondary" />)}
                     </div>
                     <p className="text-lg italic mb-6 leading-relaxed">
                       "{t.quote}"
                     </p>
-                    <p className="font-bold text-secondary">— {t.author}</p>
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-secondary">— {t.author}</p>
+                      {t.source && (
+                        <span className="text-xs text-white/50 bg-white/10 px-2 py-1 rounded">{t.source}</span>
+                      )}
+                    </div>
                   </div>
                 ))
               )}
+            </div>
+
+            <div className="text-center mt-12">
+              <Link href="/testimonials">
+                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 font-bold rounded-full px-8">
+                  Read More Reviews <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </div>
           </div>
           <AngledDivider position="bottom" color="text-white" flip />

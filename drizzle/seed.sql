@@ -51,12 +51,22 @@ INSERT INTO locations (name, address, lat, lng) VALUES
 -- TESTIMONIALS (from real parent reviews)
 -- =============================================================================
 
-INSERT INTO testimonials (quote, author, source, category, stars, active) VALUES
+INSERT INTO testimonials (quote, author, source, category, featured, stars, active) VALUES
   (
-    'Sawyer enjoys the class so much that he looks forward to it each week, picks out special outfits for it, and it''s the one class they take that he really notices if they miss. It''s also fun for parents. If parents were looking for just one class for their family, this should be it. RMA incorporates music, movement, and imaginary play in a fun-loving environment.',
+    'Rocky Mountain Aardvarks is the best music program for families. We have tried all of the Denver area programs and it''s hands down the most engaging, fun, and entertaining activity to do with the family. The songs grab the interests of our infant, toddler, and both adults.',
+    'Ricki, Mom of Cooper and Benjamin',
+    'Yelp',
+    'class',
+    1,
+    5,
+    1
+  ),
+  (
+    'Sawyer enjoys the class so much that he looks forward to it each week, picks out special outfits for it, and it''s the one class they take that he really notices if they miss. It''s also fun for parents. If parents were looking for just one class for their family, this should be it.',
     'Maegan, Sawyer''s Mom',
     'Google',
     'class',
+    1,
     5,
     1
   ),
@@ -65,14 +75,7 @@ INSERT INTO testimonials (quote, author, source, category, stars, active) VALUES
     'Rebecca, Mom of Reuben and Ari',
     'Google',
     'class',
-    5,
-    1
-  ),
-  (
-    'Rocky Mountain Aardvarks is the best music program for families. We have tried all of the Denver area programs and it''s hands down the most engaging, fun, and entertaining activity to do with the family. The songs grab the interests of our infant, toddler, and both adults.',
-    'Ricki, Mom of Cooper and Benjamin',
-    'Yelp',
-    'class',
+    1,
     5,
     1
   ),
@@ -81,6 +84,7 @@ INSERT INTO testimonials (quote, author, source, category, stars, active) VALUES
     'Wyatt''s Mom',
     'Google',
     'party',
+    0,
     5,
     1
   ),
@@ -89,6 +93,7 @@ INSERT INTO testimonials (quote, author, source, category, stars, active) VALUES
     'Nicole R.',
     'GigSalad',
     'party',
+    0,
     5,
     1
   ),
@@ -97,14 +102,16 @@ INSERT INTO testimonials (quote, author, source, category, stars, active) VALUES
     'Cassandra B.',
     'GigSalad',
     'party',
+    0,
     5,
     1
   ),
   (
-    'Not only did my son have such a great time, but all of the kids ages 4 months to 6 years old had a great time jamming out! The highlight was seeing children in music bliss and adults learning how to be childlike again. Every adult commented how much they loved having permission to be a child again.',
+    'Not only did my son have such a great time, but all of the kids ages 4 months to 6 years old had a great time jamming out! The highlight was seeing children in music bliss and adults learning how to be childlike again.',
     'Birthday Party Parent',
     'Google',
     'party',
+    0,
     5,
     1
   );
