@@ -20,6 +20,7 @@ import AdminLogin from "./pages/AdminLogin";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
+import Parties from "./pages/Parties";
 
 
 function Router() {
@@ -33,6 +34,7 @@ function Router() {
       <Route path={"/about"} component={About} />
       <Route path={"/contact"} component={Contact} />
       <Route path={"/gallery"} component={Gallery} />
+      <Route path={"/parties"} component={Parties} />
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/admin/login"} component={AdminLogin} />
       <Route path={"/admin/teachers"} component={AdminTeachers} />

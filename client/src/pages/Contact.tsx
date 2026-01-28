@@ -139,10 +139,10 @@ export default function Contact() {
                                     <div>
                                         <h3 className="font-bold text-navy">Email</h3>
                                         <a
-                                            href="mailto:info@rockymountainaardvarks.com"
+                                            href="mailto:hank@rockymtnaardvarks.com"
                                             className="text-primary hover:text-accent transition-colors"
                                         >
-                                            info@rockymountainaardvarks.com
+                                            hank@rockymtnaardvarks.com
                                         </a>
                                         <p className="text-sm text-gray-500 mt-1">
                                             We'll respond within 24 hours
