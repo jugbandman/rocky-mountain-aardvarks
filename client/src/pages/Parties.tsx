@@ -57,22 +57,50 @@ export default function Parties() {
             <Navbar />
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section className="bg-accent text-white py-20 px-4 text-center relative overflow-hidden">
+                <section className="bg-accent text-white py-16 px-4 relative overflow-hidden">
                     <div className="absolute top-10 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl"></div>
-                    <div className="relative z-10">
-                        <div className="flex justify-center mb-6">
-                            <div className="bg-white/20 p-4 rounded-full">
-                                <PartyPopper className="w-12 h-12" />
+                    <div className="max-w-6xl mx-auto relative z-10">
+                        <div className="grid md:grid-cols-2 gap-8 items-center">
+                            <div className="text-center md:text-left">
+                                <div className="flex justify-center md:justify-start mb-6">
+                                    <div className="bg-white/20 p-4 rounded-full">
+                                        <PartyPopper className="w-12 h-12" />
+                                    </div>
+                                </div>
+                                <h1 className="text-5xl md:text-6xl font-heading font-black mb-4">
+                                    Birthday Parties
+                                </h1>
+                                <p className="text-xl text-white/90">
+                                    Give your little one the most rockin' birthday party in Denver!
+                                    Live music, instruments for everyone, and memories that last forever.
+                                </p>
+                            </div>
+                            <div className="relative">
+                                <div className="grid grid-cols-2 gap-3">
+                                    <img
+                                        src="/images/parties/party-fav.jpg"
+                                        alt="Kids rocking out at a party"
+                                        className="rounded-2xl shadow-xl w-full h-40 object-cover"
+                                    />
+                                    <img
+                                        src="/images/parties/party-2.jpg"
+                                        alt="Birthday party fun"
+                                        className="rounded-2xl shadow-xl w-full h-40 object-cover"
+                                    />
+                                    <img
+                                        src="/images/parties/party-3.jpg"
+                                        alt="Kids with instruments"
+                                        className="rounded-2xl shadow-xl w-full h-40 object-cover"
+                                    />
+                                    <img
+                                        src="/images/parties/party-time.jpg"
+                                        alt="Party time celebration"
+                                        className="rounded-2xl shadow-xl w-full h-40 object-cover"
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-heading font-black mb-4">
-                            Birthday Parties
-                        </h1>
-                        <p className="max-w-2xl mx-auto text-xl text-white/90">
-                            Give your little one the most rockin' birthday party in Denver!
-                            Live music, instruments for everyone, and memories that last forever.
-                        </p>
                     </div>
                 </section>
 
