@@ -136,7 +136,7 @@ export default function Classes() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow pb-20">
                     <section className="bg-navy text-white py-16 px-4 text-center relative overflow-hidden">
@@ -161,7 +161,7 @@ export default function Classes() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow pb-20">
                     <section className="bg-navy text-white py-16 px-4 text-center">
@@ -180,7 +180,7 @@ export default function Classes() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-light">
+        <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
             <main className="flex-grow pb-20">
             {/* Hero */}

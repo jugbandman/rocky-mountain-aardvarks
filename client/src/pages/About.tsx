@@ -10,7 +10,7 @@ export default function About() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-primary text-white py-20 px-4 text-center">
@@ -31,7 +31,7 @@ export default function About() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-primary text-white py-20 px-4 text-center">
@@ -52,7 +52,7 @@ export default function About() {
     // If no content exists for our-story slug
     if (!content) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-primary text-white py-20 px-4 text-center">
@@ -69,7 +69,7 @@ export default function About() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-light">
+        <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
             <main className="flex-grow">
                 {/* Hero Section */}

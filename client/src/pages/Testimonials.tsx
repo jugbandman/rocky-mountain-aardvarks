@@ -9,7 +9,7 @@ export default function Testimonials() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-secondary text-navy py-20 px-4 text-center">
@@ -27,7 +27,7 @@ export default function Testimonials() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-secondary text-navy py-20 px-4 text-center">
@@ -46,7 +46,7 @@ export default function Testimonials() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-light">
+        <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
             <main className="flex-grow">
                 {/* Hero Section */}

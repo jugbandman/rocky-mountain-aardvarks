@@ -15,7 +15,7 @@ export default function Teachers() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-primary text-white py-20 px-4 text-center">
@@ -36,7 +36,7 @@ export default function Teachers() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-primary text-white py-20 px-4 text-center">
@@ -55,7 +55,7 @@ export default function Teachers() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-light">
+        <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
             <main className="flex-grow">
             {/* Hero Section */}
@@ -74,9 +74,9 @@ export default function Teachers() {
                         <p className="text-gray-500 text-lg">No teachers to display at this time.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <div className="flex flex-wrap justify-center gap-12">
                         {activeTeachers?.map((teacher) => (
-                            <div key={teacher.id} className="flex flex-col items-center text-center group">
+                            <div key={teacher.id} className="flex flex-col items-center text-center group max-w-sm">
                                 <div className="w-64 h-64 rounded-full overflow-hidden mb-6 border-8 border-secondary/20 group-hover:border-secondary/40 transition-all shadow-xl">
                                     {teacher.imageUrl ? (
                                         <img

@@ -92,7 +92,7 @@ export default function Locations() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-red-500 text-white py-20 px-4 text-center">
@@ -110,7 +110,7 @@ export default function Locations() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex flex-col bg-light">
+            <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
                     <section className="bg-red-500 text-white py-20 px-4 text-center">
@@ -134,7 +134,7 @@ export default function Locations() {
     const locationsWithCoords = activeLocations?.filter(l => l.lat && l.lng) || [];
 
     return (
-        <div className="min-h-screen flex flex-col bg-light">
+        <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
             <main className="flex-grow">
                 {/* Hero Section */}

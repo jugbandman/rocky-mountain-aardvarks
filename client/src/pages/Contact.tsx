@@ -89,7 +89,7 @@ export default function Contact() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-light">
+        <div className="min-h-screen flex flex-col bg-white">
             <Navbar />
             <main className="flex-grow">
                 {/* Hero Section */}

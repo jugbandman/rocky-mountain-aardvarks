@@ -13,7 +13,7 @@ export default function Home() {
   const { data: sessions, loading: sessionsLoading } = useApi<Session[]>("/sessions");
 
   return (
-    <div className="min-h-screen flex flex-col bg-background font-sans">
+    <div className="min-h-screen flex flex-col bg-white font-sans">
       <Navbar />
 
       <main className="flex-grow">
@@ -29,22 +29,22 @@ export default function Home() {
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
-              <div className="flex-1 text-center md:text-left">
+              <div className="flex-1 text-center md:text-left md:pl-8">
                 {/* Large Logo */}
-                <div className="mb-8 flex justify-center md:justify-start">
+                <div className="mb-8 flex justify-center">
                   <img
                     src="/images/branding/logo-full.png"
                     alt="Rocky Mountain Aardvarks"
                     className="w-48 md:w-64 h-auto drop-shadow-2xl"
                   />
                 </div>
-                <h1 className="text-5xl md:text-7xl font-heading font-black text-white leading-tight mb-6 tracking-tight">
+                <h1 className="text-5xl md:text-7xl font-heading font-black text-white leading-tight mb-6 tracking-tight text-center">
                   Kids Music That <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-yellow-200">ROCKS!</span>
                 </h1>
-                <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-xl mx-auto md:mx-0">
+                <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-xl mx-auto text-center">
                   Original, funky, and fun music classes for babies, toddlers, and preschoolers in Denver & Boulder. Join the band today!
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
                     <Button className="bg-accent hover:bg-accent/90 text-white font-bold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
                       Book a Class <ExternalLink className="ml-2 w-4 h-4" />
