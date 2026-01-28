@@ -52,7 +52,7 @@ export default function Testimonials() {
                 {/* Hero Section */}
                 <section className="bg-secondary text-navy py-20 px-4 text-center">
                     <h1 className="text-5xl font-heading font-black mb-4">What Families Are Saying</h1>
-                    <p className="max-w-2xl mx-auto text-xl opacity-90 font-medium">
+                    <p className="max-w-2xl mx-auto text-xl text-navy/80 font-medium">
                         Music transforms lives. Here's how Rocky Mountain Aardvarks has impacted our community of music-making families.
                     </p>
                 </section>
@@ -83,15 +83,15 @@ export default function Testimonials() {
                     <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                         <div>
                             <div className="text-5xl font-heading font-black text-secondary mb-2">500+</div>
-                            <p className="text-lg opacity-80 font-bold uppercase tracking-wider">Families Served</p>
+                            <p className="text-lg text-white/80 font-bold uppercase tracking-wider">Families Served</p>
                         </div>
                         <div>
                             <div className="text-5xl font-heading font-black text-secondary mb-2">4.9/5</div>
-                            <p className="text-lg opacity-80 font-bold uppercase tracking-wider">Google Rating</p>
+                            <p className="text-lg text-white/80 font-bold uppercase tracking-wider">Google Rating</p>
                         </div>
                         <div>
                             <div className="text-5xl font-heading font-black text-secondary mb-2">10+</div>
-                            <p className="text-lg opacity-80 font-bold uppercase tracking-wider">Years of Joy</p>
+                            <p className="text-lg text-white/80 font-bold uppercase tracking-wider">Years of Joy</p>
                         </div>
                     </div>
                 </section>

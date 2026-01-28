@@ -145,7 +145,7 @@ export default function Classes() {
                             <Music className="absolute bottom-10 right-10 w-32 h-32 -rotate-12" />
                         </div>
                         <h1 className="text-5xl font-heading font-black mb-4 relative z-10">Class Schedule</h1>
-                        <p className="text-xl opacity-90 max-w-2xl mx-auto relative z-10">
+                        <p className="text-xl text-white/90 max-w-2xl mx-auto relative z-10">
                             Find the perfect rhythm for your family.
                         </p>
                     </section>
@@ -190,7 +190,7 @@ export default function Classes() {
                     <Music className="absolute bottom-10 right-10 w-32 h-32 -rotate-12" />
                 </div>
                 <h1 className="text-5xl font-heading font-black mb-4 relative z-10">Class Schedule</h1>
-                <p className="text-xl opacity-90 max-w-2xl mx-auto relative z-10">
+                <p className="text-xl text-white/90 max-w-2xl mx-auto relative z-10">
                     Find the perfect rhythm for your family. Choose a semester and location below to see our current offerings.
                 </p>
             </section>

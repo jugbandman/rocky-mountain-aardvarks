@@ -15,7 +15,7 @@ export default function About() {
                 <main className="flex-grow">
                     <section className="bg-primary text-white py-20 px-4 text-center">
                         <h1 className="text-5xl font-heading font-black mb-4">Our Story</h1>
-                        <p className="max-w-2xl mx-auto text-xl opacity-90">
+                        <p className="max-w-2xl mx-auto text-xl text-white/90">
                             The journey of Rocky Mountain Aardvarks
                         </p>
                     </section>
@@ -75,7 +75,7 @@ export default function About() {
                 {/* Hero Section */}
                 <section className="bg-primary text-white py-20 px-4 text-center">
                     <h1 className="text-5xl font-heading font-black mb-4">{content.title}</h1>
-                    <p className="max-w-2xl mx-auto text-xl opacity-90">
+                    <p className="max-w-2xl mx-auto text-xl text-white/90">
                         The journey of Rocky Mountain Aardvarks
                     </p>
                 </section>

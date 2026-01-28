@@ -68,7 +68,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                   <div className="absolute bottom-6 left-6 text-white">
                     <p className="font-bold text-lg">Hank Williams</p>
-                    <p className="text-sm opacity-80">Director of Awesomeness</p>
+                    <p className="text-sm text-white/80">Director of Awesomeness</p>
                   </div>
                 </div>
 

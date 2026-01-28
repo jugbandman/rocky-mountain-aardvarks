@@ -63,7 +63,7 @@ export default function Locations() {
                 {/* Hero Section */}
                 <section className="bg-accent text-white py-20 px-4 text-center">
                     <h1 className="text-5xl font-heading font-black mb-4">Find A Class Near You</h1>
-                    <p className="max-w-2xl mx-auto text-xl opacity-90">
+                    <p className="max-w-2xl mx-auto text-xl text-white/90">
                         We bring the rhythm to communities all across the Rocky Mountains. Find your closest location and join the band!
                     </p>
                 </section>

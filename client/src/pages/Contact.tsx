@@ -95,7 +95,7 @@ export default function Contact() {
                 {/* Hero Section */}
                 <section className="bg-primary text-white py-20 px-4 text-center">
                     <h1 className="text-5xl font-heading font-black mb-4">Contact Us</h1>
-                    <p className="max-w-2xl mx-auto text-xl opacity-90">
+                    <p className="max-w-2xl mx-auto text-xl text-white/90">
                         Have questions? We'd love to hear from you!
                     </p>
                 </section>

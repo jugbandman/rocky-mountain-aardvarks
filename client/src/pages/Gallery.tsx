@@ -54,9 +54,9 @@ export default function Gallery() {
             <div className="min-h-screen flex flex-col bg-white">
                 <Navbar />
                 <main className="flex-grow">
-                    <section className="bg-secondary text-white py-20 px-4 text-center">
+                    <section className="bg-secondary text-navy py-20 px-4 text-center">
                         <h1 className="text-5xl font-heading font-black mb-4">Photo Gallery</h1>
-                        <p className="max-w-2xl mx-auto text-xl opacity-90">
+                        <p className="max-w-2xl mx-auto text-xl text-navy/80">
                             Capturing the joy of music and movement
                         </p>
                     </section>
@@ -95,9 +95,9 @@ export default function Gallery() {
             <Navbar />
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section className="bg-secondary text-white py-20 px-4 text-center">
+                <section className="bg-secondary text-navy py-20 px-4 text-center">
                     <h1 className="text-5xl font-heading font-black mb-4">Photo Gallery</h1>
-                    <p className="max-w-2xl mx-auto text-xl opacity-90">
+                    <p className="max-w-2xl mx-auto text-xl text-navy/80">
                         Capturing the joy of music and movement
                     </p>
                 </section>
@@ -148,7 +148,7 @@ export default function Gallery() {
                                         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                                             <h3 className="font-bold text-lg">{photo.title}</h3>
                                             {photo.description && (
-                                                <p className="text-sm opacity-90 line-clamp-2">
+                                                <p className="text-sm text-white/90 line-clamp-2">
                                                     {photo.description}
                                                 </p>
                                             )}

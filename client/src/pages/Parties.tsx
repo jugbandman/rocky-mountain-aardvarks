@@ -69,7 +69,7 @@ export default function Parties() {
                         <h1 className="text-5xl md:text-6xl font-heading font-black mb-4">
                             Birthday Parties
                         </h1>
-                        <p className="max-w-2xl mx-auto text-xl opacity-90">
+                        <p className="max-w-2xl mx-auto text-xl text-white/90">
                             Give your little one the most rockin' birthday party in Denver!
                             Live music, instruments for everyone, and memories that last forever.
                         </p>
@@ -149,7 +149,7 @@ export default function Parties() {
                         <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
                             Ready to Book?
                         </h2>
-                        <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+                        <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
                             Contact Hank to check availability and discuss your party details.
                             We book up quickly, especially on weekends!
                         </p>
@@ -167,7 +167,7 @@ export default function Parties() {
                                 </Button>
                             </a>
                         </div>
-                        <p className="text-sm opacity-75">
+                        <p className="text-sm text-white/75">
                             Or use our{" "}
                             <Link href="/contact">
                                 <a className="underline hover:no-underline">contact form</a>
