@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Star, MapPin, Calendar, FileText, Settings, BookOpen, LogOut } from "lucide-react";
+import { Users, Star, MapPin, Calendar, FileText, Settings, BookOpen, LogOut, Loader2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/hooks/useAuth";
 
 const adminLinks = [
     { href: "/admin/teachers", label: "Teachers", icon: Users, color: "text-blue-500" },
@@ -17,6 +18,7 @@ const adminLinks = [
 export default function AdminDashboard() {
     const [, setLocation] = useLocation();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const { isLoading: isCheckingAuth } = useAuth();
 
     async function handleLogout() {
         setIsLoggingOut(true);
@@ -27,6 +29,14 @@ export default function AdminDashboard() {
             // Still redirect on error - cookie may be cleared anyway
             setLocation("/admin/login");
         }
+    }
+
+    if (isCheckingAuth) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+        );
     }
 
     return (
