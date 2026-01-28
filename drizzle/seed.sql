@@ -18,14 +18,14 @@ INSERT INTO teachers (name, bio, image_url, active, display_order) VALUES
   (
     'Hank Williams',
     'Director of Awesomeness and owner of Rocky Mountain Aardvarks since 2019. Hank grew up in Austin, Texas surrounded by music, pounding out tunes on the family piano and drum kit from an early age. He started performing at 15 in a country-swing band and began teaching private music lessons in 2003. Hank joined RMA in 2016 and finds inspiration in "the wonder every new student brings" and "the evolving discussion of what music brings to each of us." When not making music with kids, he performs with Odessa Rose, an Americana Swing trio. He lives in the Regis neighborhood with his wife, three children, and their pets.',
-    '/images/hank.jpg',
+    '/images/teachers/hank.jpg',
     1,
     1
   ),
   (
     'Brian Hartman',
     'Brian first joined Rocky Mountain Aardvarks in 2012, starting by accompanying classes on guitar. A multi-talented creative, Brian is also a freelance photographer and writer. When he''s not making music with families, you''ll find him hiking in the mountains or planning his next road trip. He can''t wait to play and sing with you all very soon!',
-    '/images/brian.jpg',
+    '/images/teachers/brian.jpg',
     1,
     2
   );
@@ -120,7 +120,7 @@ INSERT INTO classes (title, description, age_range, duration, price, image_url) 
     '3 months - 5 years',
     '45 minutes',
     28000,
-    '/images/mixed-ages.jpg'
+    '/images/classes/rma-stills-01.jpg'
   );
 
 -- =============================================================================
