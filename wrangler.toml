@@ -1,5 +1,8 @@
 name = "rocky-mountain-aardvarks"
-pages_build_output_dir = "dist"
+pages_build_output_dir = "dist/public"
+
+[build]
+command = "pnpm install && pnpm build"
 
 [[d1_databases]]
 binding = "DB"
