@@ -7,7 +7,7 @@ command = "pnpm install && pnpm build"
 [[d1_databases]]
 binding = "DB"
 database_name = "aardvarks-db"
-database_id = "00000000-0000-0000-0000-000000000000" # User will need to run wrangler d1 create
+database_id = "db64149b-582f-4d97-a35d-d46d7d416989"
 migrations_dir = "drizzle"
 
 [vars]
