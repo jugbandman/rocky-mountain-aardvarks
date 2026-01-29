@@ -694,10 +694,16 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
 
 app.post("/admin/sync-mainstreet", async (c) => {
     try {
-        // Fetch MainStreet page
-        const response = await fetch(MAINSTREET_URL);
+        // Fetch MainStreet page with browser-like headers
+        const response = await fetch(MAINSTREET_URL, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+            }
+        });
         if (!response.ok) {
-            return c.json({ error: "Failed to fetch MainStreet page" }, 500);
+            return c.json({ error: `Failed to fetch MainStreet page: ${response.status} ${response.statusText}` }, 500);
         }
 
         const html = await response.text();
@@ -798,6 +804,35 @@ app.post("/admin/sync-mainstreet", async (c) => {
 
     } catch (err) {
         return c.json({ error: `Sync failed: ${err}` }, 500);
+    }
+});
+
+// Debug endpoint to test MainStreet fetch
+app.get("/admin/debug-mainstreet", async (c) => {
+    try {
+        const response = await fetch(MAINSTREET_URL, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': 'text/html',
+            }
+        });
+        const html = await response.text();
+        const hasTable = html.includes('classTable');
+        const hasItemRows = html.includes('classTableItemTR');
+        const rowMatches = html.match(/<tr[^>]*class="classTableItemTR[^"]*"[^>]*>/gi) || [];
+
+        return c.json({
+            status: response.status,
+            contentType: response.headers.get('content-type'),
+            htmlLength: html.length,
+            hasTable,
+            hasItemRows,
+            rowMatchCount: rowMatches.length,
+            firstRows: rowMatches.slice(0, 2),
+            htmlSample: html.slice(0, 1000)
+        });
+    } catch (err) {
+        return c.json({ error: String(err) }, 500);
     }
 });
 
