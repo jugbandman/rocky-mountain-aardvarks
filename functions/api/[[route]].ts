@@ -601,20 +601,20 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
 
     // Find session name from page (Spring 2026, Winter 2026, etc.)
     const sessionMatch = html.match(/(?:Spring|Summer|Fall|Winter)\s+\d{4}/i);
-    const sessionName = sessionMatch ? sessionMatch[0] : 'Current Session';
+    const sessionName = sessionMatch ? sessionMatch[0] : 'Spring 2026';
 
-    // Parse table rows - look for rows with altDataRow or tableRow class
-    // Columns: Location, Class, Schedule, Start Date, Duration, Instructor, Register
-    const rowPattern = /<tr[^>]*class="[^"]*(?:altDataRow|tableRow)[^"]*"[^>]*>([\s\S]*?)<\/tr>/gi;
-    const linkPattern = /href="([^"]*register\.aspx[^"]*)"/i;
+    // Parse table rows - look for classTableItemTR rows (the actual class entries)
+    // These have class="classTableItemTR tableRow dataRow" or "classTableItemTR tableRow altDataRow"
+    const rowPattern = /<tr[^>]*class="classTableItemTR[^"]*"[^>]*>([\s\S]*?)<\/tr>/gi;
+    const linkPattern = /href="(register\.aspx\?cls=\d+)"/i;
 
     let rowMatch;
     while ((rowMatch = rowPattern.exec(html)) !== null) {
         const rowHtml = rowMatch[1];
         const cells: string[] = [];
 
-        // Extract cell contents
-        const cellRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+        // Extract cell contents from classTableItemTD cells
+        const cellRegex = /<td[^>]*class="classTableItemTD"[^>]*>([\s\S]*?)<\/td>/gi;
         let cellMatch;
         while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
             // Strip HTML tags and decode entities
@@ -623,6 +623,8 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
                 .replace(/&nbsp;/g, ' ')
                 .replace(/&amp;/g, '&')
                 .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'")
                 .replace(/\s+/g, ' ')
                 .trim();
             cells.push(text);
@@ -632,17 +634,16 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
         const linkMatch = rowHtml.match(linkPattern);
         const registerUrl = linkMatch ? linkMatch[1] : '';
 
-        // Expected columns: Location, Class, Schedule, Start Date, Duration, Instructor
-        // Schedule format: "Monday 9:30 AM - 10:15 AM"
-        if (cells.length >= 6) {
+        // Columns: Class/Location, Schedule, Start Date, Duration, Instructor, Register(empty)
+        // Example: "Washington Park", "Tuesday 10:00 AM - 10:45 AM", "Mar 03, 2026", "10 weeks", "Hank Williams"
+        if (cells.length >= 5) {
             const locationName = cells[0] || '';
-            const className = cells[1] || '';
-            const schedule = cells[2] || '';
-            const startDateStr = cells[3] || '';
-            const duration = cells[4] || '';
-            const instructor = cells[5] || '';
+            const schedule = cells[1] || '';
+            const startDateStr = cells[2] || '';
+            const duration = cells[3] || '';
+            const instructor = cells[4] || '';
 
-            // Parse schedule - format: "Monday 9:30 AM - 10:15 AM"
+            // Parse schedule - format: "Tuesday 10:00 AM - 10:45 AM"
             const scheduleMatch = schedule.match(/(\w+)\s+(\d{1,2}:\d{2}\s*(?:AM|PM))/i);
             const dayOfWeek = scheduleMatch ? scheduleMatch[1] : '';
             const time = scheduleMatch ? scheduleMatch[2] : '';
@@ -668,8 +669,9 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
             const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + (weeks * 7));
 
-            // Generate unique ID for upsert
-            const mainstreetId = `${locationName}-${dayOfWeek}-${time}-${startDateStr}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            // Generate unique ID using the class ID from register URL
+            const classIdMatch = registerUrl.match(/cls=(\d+)/);
+            const mainstreetId = classIdMatch ? `cls-${classIdMatch[1]}` : `${locationName}-${dayOfWeek}-${time}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
             if (locationName && dayOfWeek && time) {
                 sessions.push({
@@ -680,7 +682,7 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
                     startDate,
                     duration,
                     instructor: instructor || 'TBD',
-                    mainstreetUrl: registerUrl.startsWith('http') ? registerUrl : `https://app.mainstreetsites.com/dmn2417/${registerUrl}`,
+                    mainstreetUrl: `https://app.mainstreetsites.com/dmn2417/${registerUrl}`,
                     mainstreetId
                 });
             }
