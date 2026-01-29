@@ -599,36 +599,31 @@ interface ParsedSession {
 function parseMainStreetHTML(html: string): ParsedSession[] {
     const sessions: ParsedSession[] = [];
 
-    // Find session tabs (Spring 2026, Winter 2026, etc.)
-    const tabMatches = html.matchAll(/class="[^"]*tab[^"]*"[^>]*>([^<]+)</gi);
-    const sessionNames: string[] = [];
-    for (const match of tabMatches) {
-        const name = match[1].trim();
-        if (name && /\d{4}/.test(name)) {
-            sessionNames.push(name);
-        }
-    }
+    // Find session name from page (Spring 2026, Winter 2026, etc.)
+    const sessionMatch = html.match(/(?:Spring|Summer|Fall|Winter)\s+\d{4}/i);
+    const sessionName = sessionMatch ? sessionMatch[0] : 'Current Session';
 
-    // Parse table rows for class data
-    // Pattern: location, day/time, start date, duration, instructor, register link
-    const rowPattern = /<tr[^>]*class="[^"]*(?:odd|even)[^"]*"[^>]*>([\s\S]*?)<\/tr>/gi;
-    const cellPattern = /<td[^>]*>([\s\S]*?)<\/td>/gi;
-    const linkPattern = /href="([^"]*register[^"]*)"/i;
+    // Parse table rows - look for rows with altDataRow or tableRow class
+    // Columns: Location, Class, Schedule, Start Date, Duration, Instructor, Register
+    const rowPattern = /<tr[^>]*class="[^"]*(?:altDataRow|tableRow)[^"]*"[^>]*>([\s\S]*?)<\/tr>/gi;
+    const linkPattern = /href="([^"]*register\.aspx[^"]*)"/i;
 
     let rowMatch;
     while ((rowMatch = rowPattern.exec(html)) !== null) {
         const rowHtml = rowMatch[1];
         const cells: string[] = [];
 
-        let cellMatch;
+        // Extract cell contents
         const cellRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+        let cellMatch;
         while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
             // Strip HTML tags and decode entities
             const text = cellMatch[1]
-                .replace(/<[^>]+>/g, '')
+                .replace(/<[^>]+>/g, ' ')
                 .replace(/&nbsp;/g, ' ')
                 .replace(/&amp;/g, '&')
                 .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
+                .replace(/\s+/g, ' ')
                 .trim();
             cells.push(text);
         }
@@ -637,26 +632,28 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
         const linkMatch = rowHtml.match(linkPattern);
         const registerUrl = linkMatch ? linkMatch[1] : '';
 
-        // Expected columns: Location, Day/Time, Start Date, Duration, Instructor, Register
-        if (cells.length >= 5) {
+        // Expected columns: Location, Class, Schedule, Start Date, Duration, Instructor
+        // Schedule format: "Monday 9:30 AM - 10:15 AM"
+        if (cells.length >= 6) {
             const locationName = cells[0] || '';
-            const dayTime = cells[1] || '';
-            const startDateStr = cells[2] || '';
-            const duration = cells[3] || '';
-            const instructor = cells[4] || '';
+            const className = cells[1] || '';
+            const schedule = cells[2] || '';
+            const startDateStr = cells[3] || '';
+            const duration = cells[4] || '';
+            const instructor = cells[5] || '';
 
-            // Parse day and time
-            const dayTimeMatch = dayTime.match(/(\w+)\s+(\d{1,2}:\d{2}\s*(?:AM|PM)?)/i);
-            const dayOfWeek = dayTimeMatch ? dayTimeMatch[1] : dayTime.split(/\s+/)[0] || '';
-            const time = dayTimeMatch ? dayTimeMatch[2] : dayTime.split(/\s+/).slice(1).join(' ') || '';
+            // Parse schedule - format: "Monday 9:30 AM - 10:15 AM"
+            const scheduleMatch = schedule.match(/(\w+)\s+(\d{1,2}:\d{2}\s*(?:AM|PM))/i);
+            const dayOfWeek = scheduleMatch ? scheduleMatch[1] : '';
+            const time = scheduleMatch ? scheduleMatch[2] : '';
 
-            // Parse start date
+            // Parse start date - format: "Mar 03, 2026"
             let startDate = new Date();
-            const dateMatch = startDateStr.match(/(\w+)\s+(\d{1,2}),?\s*(\d{4})?/);
+            const dateMatch = startDateStr.match(/(\w+)\s+(\d{1,2}),?\s*(\d{4})/);
             if (dateMatch) {
                 const monthStr = dateMatch[1];
                 const day = parseInt(dateMatch[2]);
-                const year = dateMatch[3] ? parseInt(dateMatch[3]) : new Date().getFullYear();
+                const year = parseInt(dateMatch[3]);
                 const monthMap: Record<string, number> = {
                     jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
                     jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
@@ -672,12 +669,9 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
             endDate.setDate(endDate.getDate() + (weeks * 7));
 
             // Generate unique ID for upsert
-            const mainstreetId = `${locationName}-${dayOfWeek}-${time}-${startDateStr}`.toLowerCase().replace(/\s+/g, '-');
+            const mainstreetId = `${locationName}-${dayOfWeek}-${time}-${startDateStr}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-            // Get session name from context (simplified - use first found)
-            const sessionName = sessionNames[0] || 'Current Session';
-
-            if (locationName && dayOfWeek) {
+            if (locationName && dayOfWeek && time) {
                 sessions.push({
                     sessionName,
                     locationName,
@@ -685,8 +679,8 @@ function parseMainStreetHTML(html: string): ParsedSession[] {
                     time,
                     startDate,
                     duration,
-                    instructor,
-                    mainstreetUrl: registerUrl.startsWith('http') ? registerUrl : `https://app.mainstreetsites.com${registerUrl}`,
+                    instructor: instructor || 'TBD',
+                    mainstreetUrl: registerUrl.startsWith('http') ? registerUrl : `https://app.mainstreetsites.com/dmn2417/${registerUrl}`,
                     mainstreetId
                 });
             }
@@ -708,7 +702,18 @@ app.post("/admin/sync-mainstreet", async (c) => {
         const parsedSessions = parseMainStreetHTML(html);
 
         if (parsedSessions.length === 0) {
-            return c.json({ error: "No sessions found on MainStreet page", html: html.slice(0, 1000) }, 400);
+            // Debug: check if we can find the table at all
+            const hasTable = html.includes('classTable');
+            const hasRows = html.includes('altDataRow') || html.includes('tableRow');
+            return c.json({
+                error: "No sessions found on MainStreet page",
+                debug: {
+                    hasTable,
+                    hasRows,
+                    htmlLength: html.length,
+                    sample: html.slice(0, 2000)
+                }
+            }, 400);
         }
 
         const db = getDb(c.env.DB);
