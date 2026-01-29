@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useApi } from "@/hooks/useApi";
-import { Loader2, Calendar, MapPin, Clock, Music, Info, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
+import { Loader2, Calendar, MapPin, Clock, Music, Info, CheckCircle2, AlertCircle, ExternalLink, List, CalendarDays } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import type { Class, Location } from "@shared/schema";
@@ -8,6 +8,7 @@ import { format, isWithinInterval } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MAINSTREET_BOOKING_URL } from "@/lib/constants";
+import { ClassCalendar } from "@/components/ClassCalendar";
 
 interface SessionWithRelations {
     id: number;
@@ -116,6 +117,7 @@ export default function Classes() {
     }, [semesters]);
 
     const [activeSemester, setActiveSemester] = useState<string>("");
+    const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
 
     // Set default active semester when data loads
     useMemo(() => {
@@ -195,8 +197,45 @@ export default function Classes() {
                 </p>
             </section>
 
-            {/* Semester Tabs */}
-            <div className="max-w-7xl mx-auto px-4 -mt-8">
+            {/* View Toggle */}
+            <div className="max-w-7xl mx-auto px-4 -mt-12 mb-4 relative z-20">
+                <div className="flex justify-center">
+                    <div className="bg-white rounded-full shadow-lg p-1 inline-flex">
+                        <button
+                            onClick={() => setViewMode("list")}
+                            className={`flex items-center gap-2 px-6 py-2 rounded-full font-bold transition-all ${
+                                viewMode === "list"
+                                    ? "bg-primary text-white"
+                                    : "text-gray-600 hover:bg-gray-100"
+                            }`}
+                        >
+                            <List className="w-4 h-4" />
+                            List
+                        </button>
+                        <button
+                            onClick={() => setViewMode("calendar")}
+                            className={`flex items-center gap-2 px-6 py-2 rounded-full font-bold transition-all ${
+                                viewMode === "calendar"
+                                    ? "bg-primary text-white"
+                                    : "text-gray-600 hover:bg-gray-100"
+                            }`}
+                        >
+                            <CalendarDays className="w-4 h-4" />
+                            Calendar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Calendar View */}
+            {viewMode === "calendar" && sessions && sessions.length > 0 && (
+                <div className="max-w-4xl mx-auto px-4 py-8">
+                    <ClassCalendar sessions={sessions} />
+                </div>
+            )}
+
+            {/* Semester Tabs (List View) */}
+            <div className={`max-w-7xl mx-auto px-4 ${viewMode === "calendar" ? "hidden" : ""}`}
                 {semesters.length === 0 ? (
                     <div className="bg-white rounded-[2.5rem] p-20 text-center shadow-xl">
                         <Calendar className="w-20 h-20 text-primary mx-auto mb-6 opacity-20" />
