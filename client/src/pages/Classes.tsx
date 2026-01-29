@@ -235,7 +235,7 @@ export default function Classes() {
             )}
 
             {/* Semester Tabs (List View) */}
-            <div className={`max-w-7xl mx-auto px-4 ${viewMode === "calendar" ? "hidden" : ""}`}
+            <div className={`max-w-7xl mx-auto px-4 ${viewMode === "calendar" ? "hidden" : ""}`}>
                 {semesters.length === 0 ? (
                     <div className="bg-white rounded-[2.5rem] p-20 text-center shadow-xl">
                         <Calendar className="w-20 h-20 text-primary mx-auto mb-6 opacity-20" />
