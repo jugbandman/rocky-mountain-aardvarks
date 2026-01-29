@@ -704,16 +704,25 @@ app.post("/admin/sync-mainstreet", async (c) => {
         const parsedSessions = parseMainStreetHTML(html);
 
         if (parsedSessions.length === 0) {
-            // Debug: check if we can find the table at all
+            // Debug: check what we can find
             const hasTable = html.includes('classTable');
-            const hasRows = html.includes('altDataRow') || html.includes('tableRow');
+            const hasItemRows = html.includes('classTableItemTR');
+            const hasItemCells = html.includes('classTableItemTD');
+            const rowMatches = html.match(/<tr[^>]*classTableItemTR[^>]*>/gi) || [];
+
+            // Try to find the table section
+            const tableStart = html.indexOf('id="ctl04_ctl00_phClassesClassTable"');
+            const tableSample = tableStart > -1 ? html.slice(tableStart, tableStart + 3000) : 'table not found';
+
             return c.json({
                 error: "No sessions found on MainStreet page",
                 debug: {
                     hasTable,
-                    hasRows,
+                    hasItemRows,
+                    hasItemCells,
+                    rowMatchCount: rowMatches.length,
                     htmlLength: html.length,
-                    sample: html.slice(0, 2000)
+                    tableSample
                 }
             }, 400);
         }
