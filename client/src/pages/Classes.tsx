@@ -356,7 +356,7 @@ export default function Classes() {
                                                                                     >
                                                                                         {session.status}
                                                                                     </span>
-                                                                                    <a href={MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                                                                                    <a href={(session as any).mainstreetUrl || MAINSTREET_BOOKING_URL} target="_blank" rel="noopener noreferrer">
                                                                                         <Button className="rounded-full font-black px-8">
                                                                                             {session.status === "Full"
                                                                                                 ? "Join Waitlist"

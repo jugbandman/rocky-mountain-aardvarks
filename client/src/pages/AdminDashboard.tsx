@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Star, MapPin, Calendar, FileText, Settings, BookOpen, LogOut, Loader2 } from "lucide-react";
+import { Users, Star, MapPin, Calendar, FileText, Settings, BookOpen, LogOut, Loader2, RefreshCw, CheckCircle, AlertCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/hooks/useAuth";
@@ -18,7 +18,27 @@ const adminLinks = [
 export default function AdminDashboard() {
     const [, setLocation] = useLocation();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [syncResult, setSyncResult] = useState<{ success: boolean; message: string } | null>(null);
     const { isLoading: isCheckingAuth } = useAuth();
+
+    async function handleSyncMainStreet() {
+        setIsSyncing(true);
+        setSyncResult(null);
+        try {
+            const response = await fetch("/api/admin/sync-mainstreet", { method: "POST" });
+            const data = await response.json();
+            if (data.success) {
+                setSyncResult({ success: true, message: `Synced ${data.synced} classes from MainStreet` });
+            } else {
+                setSyncResult({ success: false, message: data.error || "Sync failed" });
+            }
+        } catch (err) {
+            setSyncResult({ success: false, message: "Failed to connect to sync service" });
+        } finally {
+            setIsSyncing(false);
+        }
+    }
 
     async function handleLogout() {
         setIsLoggingOut(true);
@@ -91,6 +111,45 @@ export default function AdminDashboard() {
                             <p className="text-sm text-gray-400">Account and site-wide preferences.</p>
                         </CardContent>
                     </Card>
+                </div>
+
+                {/* MainStreet Sync Section */}
+                <div className="mt-12 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-xl font-bold text-gray-800">MainStreet Class Sync</h2>
+                            <p className="text-sm text-gray-500">Pull latest class schedule from MainStreet booking system</p>
+                        </div>
+                        <Button
+                            onClick={handleSyncMainStreet}
+                            disabled={isSyncing}
+                            className="bg-primary hover:bg-primary/90"
+                        >
+                            {isSyncing ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    Syncing...
+                                </>
+                            ) : (
+                                <>
+                                    <RefreshCw className="w-4 h-4 mr-2" />
+                                    Sync Classes
+                                </>
+                            )}
+                        </Button>
+                    </div>
+                    {syncResult && (
+                        <div className={`mt-4 p-3 rounded-lg flex items-center gap-2 ${
+                            syncResult.success ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+                        }`}>
+                            {syncResult.success ? (
+                                <CheckCircle className="w-5 h-5" />
+                            ) : (
+                                <AlertCircle className="w-5 h-5" />
+                            )}
+                            <span>{syncResult.message}</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

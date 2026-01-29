@@ -22,14 +22,21 @@ export const locations = sqliteTable("locations", {
 
 export const sessions = sqliteTable("sessions", {
     id: integer("id").primaryKey({ autoIncrement: true }),
-    classId: integer("class_id").references(() => classes.id).notNull(),
-    locationId: integer("location_id").references(() => locations.id).notNull(),
+    classId: integer("class_id").references(() => classes.id), // Optional for synced sessions
+    locationId: integer("location_id").references(() => locations.id),
+    locationName: text("location_name"), // Denormalized for MainStreet sync
     dayOfWeek: text("day_of_week").notNull(),
     time: text("time").notNull(),
     instructor: text("instructor").notNull(),
     status: text("status").notNull().default("Open"), // Open, Few Spots Left, Full, Waitlist
     startDate: integer("start_date", { mode: "timestamp" }).notNull(),
     endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+    // MainStreet sync fields
+    sessionName: text("session_name"), // "Spring 2026", "Winter 2026"
+    duration: text("duration"), // "10 weeks"
+    mainstreetUrl: text("mainstreet_url"), // Direct registration link
+    mainstreetId: text("mainstreet_id"), // Unique ID for upsert (hash of session details)
+    syncedAt: integer("synced_at", { mode: "timestamp" }), // Last sync timestamp
 });
 
 export const registrations = sqliteTable("registrations", {

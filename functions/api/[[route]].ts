@@ -581,4 +581,223 @@ app.delete("/admin/photos/:id", async (c) => {
     return c.json({ success: true });
 });
 
+// MainStreet Sync
+const MAINSTREET_URL = "https://app.mainstreetsites.com/dmn2417/classes.aspx";
+
+interface ParsedSession {
+    sessionName: string;
+    locationName: string;
+    dayOfWeek: string;
+    time: string;
+    startDate: Date;
+    duration: string;
+    instructor: string;
+    mainstreetUrl: string;
+    mainstreetId: string;
+}
+
+function parseMainStreetHTML(html: string): ParsedSession[] {
+    const sessions: ParsedSession[] = [];
+
+    // Find session tabs (Spring 2026, Winter 2026, etc.)
+    const tabMatches = html.matchAll(/class="[^"]*tab[^"]*"[^>]*>([^<]+)</gi);
+    const sessionNames: string[] = [];
+    for (const match of tabMatches) {
+        const name = match[1].trim();
+        if (name && /\d{4}/.test(name)) {
+            sessionNames.push(name);
+        }
+    }
+
+    // Parse table rows for class data
+    // Pattern: location, day/time, start date, duration, instructor, register link
+    const rowPattern = /<tr[^>]*class="[^"]*(?:odd|even)[^"]*"[^>]*>([\s\S]*?)<\/tr>/gi;
+    const cellPattern = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+    const linkPattern = /href="([^"]*register[^"]*)"/i;
+
+    let rowMatch;
+    while ((rowMatch = rowPattern.exec(html)) !== null) {
+        const rowHtml = rowMatch[1];
+        const cells: string[] = [];
+
+        let cellMatch;
+        const cellRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+        while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
+            // Strip HTML tags and decode entities
+            const text = cellMatch[1]
+                .replace(/<[^>]+>/g, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&amp;/g, '&')
+                .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
+                .trim();
+            cells.push(text);
+        }
+
+        // Extract registration URL
+        const linkMatch = rowHtml.match(linkPattern);
+        const registerUrl = linkMatch ? linkMatch[1] : '';
+
+        // Expected columns: Location, Day/Time, Start Date, Duration, Instructor, Register
+        if (cells.length >= 5) {
+            const locationName = cells[0] || '';
+            const dayTime = cells[1] || '';
+            const startDateStr = cells[2] || '';
+            const duration = cells[3] || '';
+            const instructor = cells[4] || '';
+
+            // Parse day and time
+            const dayTimeMatch = dayTime.match(/(\w+)\s+(\d{1,2}:\d{2}\s*(?:AM|PM)?)/i);
+            const dayOfWeek = dayTimeMatch ? dayTimeMatch[1] : dayTime.split(/\s+/)[0] || '';
+            const time = dayTimeMatch ? dayTimeMatch[2] : dayTime.split(/\s+/).slice(1).join(' ') || '';
+
+            // Parse start date
+            let startDate = new Date();
+            const dateMatch = startDateStr.match(/(\w+)\s+(\d{1,2}),?\s*(\d{4})?/);
+            if (dateMatch) {
+                const monthStr = dateMatch[1];
+                const day = parseInt(dateMatch[2]);
+                const year = dateMatch[3] ? parseInt(dateMatch[3]) : new Date().getFullYear();
+                const monthMap: Record<string, number> = {
+                    jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+                    jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+                };
+                const month = monthMap[monthStr.toLowerCase().slice(0, 3)] ?? 0;
+                startDate = new Date(year, month, day);
+            }
+
+            // Calculate end date based on duration
+            const weeksMatch = duration.match(/(\d+)\s*weeks?/i);
+            const weeks = weeksMatch ? parseInt(weeksMatch[1]) : 10;
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + (weeks * 7));
+
+            // Generate unique ID for upsert
+            const mainstreetId = `${locationName}-${dayOfWeek}-${time}-${startDateStr}`.toLowerCase().replace(/\s+/g, '-');
+
+            // Get session name from context (simplified - use first found)
+            const sessionName = sessionNames[0] || 'Current Session';
+
+            if (locationName && dayOfWeek) {
+                sessions.push({
+                    sessionName,
+                    locationName,
+                    dayOfWeek,
+                    time,
+                    startDate,
+                    duration,
+                    instructor,
+                    mainstreetUrl: registerUrl.startsWith('http') ? registerUrl : `https://app.mainstreetsites.com${registerUrl}`,
+                    mainstreetId
+                });
+            }
+        }
+    }
+
+    return sessions;
+}
+
+app.post("/admin/sync-mainstreet", async (c) => {
+    try {
+        // Fetch MainStreet page
+        const response = await fetch(MAINSTREET_URL);
+        if (!response.ok) {
+            return c.json({ error: "Failed to fetch MainStreet page" }, 500);
+        }
+
+        const html = await response.text();
+        const parsedSessions = parseMainStreetHTML(html);
+
+        if (parsedSessions.length === 0) {
+            return c.json({ error: "No sessions found on MainStreet page", html: html.slice(0, 1000) }, 400);
+        }
+
+        const db = getDb(c.env.DB);
+        const now = new Date();
+        let synced = 0;
+        let errors: string[] = [];
+
+        for (const session of parsedSessions) {
+            try {
+                // Check if session already exists by mainstreetId
+                const existing = await db.select()
+                    .from(schema.sessions)
+                    .where(eq(schema.sessions.mainstreetId, session.mainstreetId))
+                    .get();
+
+                // Calculate end date
+                const weeksMatch = session.duration.match(/(\d+)\s*weeks?/i);
+                const weeks = weeksMatch ? parseInt(weeksMatch[1]) : 10;
+                const endDate = new Date(session.startDate);
+                endDate.setDate(endDate.getDate() + (weeks * 7));
+
+                if (existing) {
+                    // Update existing session
+                    await db.update(schema.sessions)
+                        .set({
+                            locationName: session.locationName,
+                            dayOfWeek: session.dayOfWeek,
+                            time: session.time,
+                            instructor: session.instructor,
+                            startDate: session.startDate,
+                            endDate: endDate,
+                            sessionName: session.sessionName,
+                            duration: session.duration,
+                            mainstreetUrl: session.mainstreetUrl,
+                            syncedAt: now,
+                        })
+                        .where(eq(schema.sessions.id, existing.id))
+                        .run();
+                } else {
+                    // Insert new session
+                    await db.insert(schema.sessions)
+                        .values({
+                            locationName: session.locationName,
+                            dayOfWeek: session.dayOfWeek,
+                            time: session.time,
+                            instructor: session.instructor,
+                            status: "Open",
+                            startDate: session.startDate,
+                            endDate: endDate,
+                            sessionName: session.sessionName,
+                            duration: session.duration,
+                            mainstreetUrl: session.mainstreetUrl,
+                            mainstreetId: session.mainstreetId,
+                            syncedAt: now,
+                        })
+                        .run();
+                }
+                synced++;
+            } catch (err) {
+                errors.push(`Failed to sync ${session.mainstreetId}: ${err}`);
+            }
+        }
+
+        return c.json({
+            success: true,
+            synced,
+            total: parsedSessions.length,
+            errors: errors.length > 0 ? errors : undefined,
+            timestamp: now.toISOString()
+        });
+
+    } catch (err) {
+        return c.json({ error: `Sync failed: ${err}` }, 500);
+    }
+});
+
+// Public endpoint to get sync status
+app.get("/sync-status", async (c) => {
+    const db = getDb(c.env.DB);
+    const latest = await db.select()
+        .from(schema.sessions)
+        .where(eq(schema.sessions.mainstreetId, schema.sessions.mainstreetId)) // Has mainstreetId = synced
+        .limit(1)
+        .get();
+
+    return c.json({
+        lastSync: latest?.syncedAt || null,
+        hasSyncedData: !!latest?.mainstreetId
+    });
+});
+
 export const onRequest = handle(app);
