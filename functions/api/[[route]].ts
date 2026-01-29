@@ -789,8 +789,8 @@ app.post("/admin/sync-mainstreet", async (c) => {
                         .run();
                 }
                 synced++;
-            } catch (err) {
-                errors.push(`Failed to sync ${session.mainstreetId}: ${err}`);
+            } catch (err: any) {
+                errors.push(`Failed to sync ${session.mainstreetId}: ${err?.message || String(err)}`);
             }
         }
 
@@ -799,7 +799,8 @@ app.post("/admin/sync-mainstreet", async (c) => {
             synced,
             total: parsedSessions.length,
             errors: errors.length > 0 ? errors : undefined,
-            timestamp: now.toISOString()
+            timestamp: now.toISOString(),
+            parsed: parsedSessions.slice(0, 2) // Show first 2 parsed sessions for debugging
         });
 
     } catch (err) {
