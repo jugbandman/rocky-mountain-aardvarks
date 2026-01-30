@@ -66,7 +66,7 @@ export default function Home() {
               <div className="flex-1 relative">
                 <div className="relative z-10 rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
                   <img
-                    src="/photo-group-1.jpg"
+                    src="/images/hero/home-banner.jpg"
                     alt="Rocky Mountain Aardvarks class fun"
                     className="w-full h-full object-cover"
                   />
