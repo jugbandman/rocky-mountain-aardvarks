@@ -808,6 +808,27 @@ app.post("/admin/sync-mainstreet", async (c) => {
     }
 });
 
+// Debug endpoint to test MainStreet parsing (no DB writes)
+app.get("/admin/test-parse", async (c) => {
+    try {
+        const response = await fetch(MAINSTREET_URL, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': 'text/html',
+            }
+        });
+        const html = await response.text();
+        const sessions = parseMainStreetHTML(html);
+        return c.json({
+            success: true,
+            count: sessions.length,
+            sessions
+        });
+    } catch (err: any) {
+        return c.json({ error: err?.message || String(err) }, 500);
+    }
+});
+
 // Debug endpoint to test MainStreet fetch
 app.get("/admin/debug-mainstreet", async (c) => {
     try {
